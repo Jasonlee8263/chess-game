@@ -78,86 +78,118 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 //        throw new RuntimeException("Not implemented");
         Collection<ChessMove> moves = new HashSet<>();
-        public ChessMove kingMoves(ChessBoard board) {
-            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
-            for (int[] direction: directions) {
-                int row = myPosition.getRow() + direction[0];
-                int col = myPosition.getColumn() + direction[1];
-                while (board.isVaildPosition(row, col) && board.isTaken(row,col)) {
-                    ChessPosition newPosition = new ChessPosition(row, col);
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                }
-            }
-            return moves;
-        }
-        public ChessMove queenMoves(ChessBoard board) {
-            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
-            for (int[] direction: directions) {
-                int row = myPosition.getRow() + direction[0];
-                int col = myPosition.getColumn() + direction[1];
-                while (board.isVaildPosition(row, col)) {
-                    ChessPosition newPosition = new ChessPosition(row, col);
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                    row += direction[0];
-                    col += direction[1];
-                }
-            }
-            return moves;
-        }
-        public Collection<ChessMove> bishopMoves(ChessBoard board) {
-            int [][] directions = {{1,1},{1,-1},{-1,1},{-1,-1}};
-            for (int[] direction: directions) {
-                int row = myPosition.getRow() + direction[0];
-                int col = myPosition.getColumn() + direction[1];
-                while (board.isVaildPosition(row,col)){
-                    ChessPosition newPosition = new ChessPosition(row,col);
-                    moves.add(new ChessMove(myPosition,newPosition,null));
-                    row += direction[0];
-                    col += direction[1];
-                }
-            }
-            return moves;
-        }
-
-        public int[] knightMoves(ChessBoard board) {
-            int [][] directions = {{2,1},{2,-1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2}};
-            for (int[] direction: directions) {
-                int row = myPosition.getRow() + direction[0];
-                int col = myPosition.getColumn() + direction[1];
-                while (board.isVaildPosition(row,col)) {
-                    ChessPosition newPosition = new ChessPosition(row,col);
-                    moves.add(new ChessMove(myPosition,newPosition,null));
-                }
-            }
-            return moves;
-        }
-        public ChessMove rookMoves(ChessBoard board) {
-            int [][] directions = {{1,0},{0,1},{-1,0},{0,-1}};
-            for (int[] direction: directions) {
-                int row = myPosition.getRow() + direction[0];
-                int col = myPosition.getColumn() + direction[1];
-                while (board.isVaildPosition(row, col)) {
-                    ChessPosition newPosition = new ChessPosition(row, col);
-                    moves.add(new ChessMove(myPosition, newPosition, null));
-                    row += direction[0];
-                    col += direction[1];
-                }
-            }
-            return moves;
-        }
-        public ChessMove pawnMoves(ChessBoard board) {
-
-        }
-        switch (type) {
+//        public ChessMove kingMoves(ChessBoard board) {
+//            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+//            for (int[] direction: directions) {
+//                int row = myPosition.getRow() + direction[0];
+//                int col = myPosition.getColumn() + direction[1];
+//                while (board.isVaildPosition(row, col) && board.isTaken(row,col)) {
+//                    ChessPosition newPosition = new ChessPosition(row, col);
+//                    moves.add(new ChessMove(myPosition, newPosition, null));
+//                }
+//            }
+//            return moves;
+//        }
+//        public ChessMove queenMoves(ChessBoard board) {
+//            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+//            for (int[] direction: directions) {
+//                int row = myPosition.getRow() + direction[0];
+//                int col = myPosition.getColumn() + direction[1];
+//                while (board.isVaildPosition(row, col)) {
+//                    ChessPosition newPosition = new ChessPosition(row, col);
+//                    moves.add(new ChessMove(myPosition, newPosition, null));
+//                    row += direction[0];
+//                    col += direction[1];
+//                }
+//            }
+//            return moves;
+//        }
+//        public Collection<ChessMove> bishopMoves(ChessBoard board) {
+//            int [][] directions = {{1,1},{1,-1},{-1,1},{-1,-1}};
+//            for (int[] direction: directions) {
+//                int row = myPosition.getRow() + direction[0];
+//                int col = myPosition.getColumn() + direction[1];
+//                while (board.isVaildPosition(row,col)){
+//                    ChessPosition newPosition = new ChessPosition(row,col);
+//                    moves.add(new ChessMove(myPosition,newPosition,null));
+//                    row += direction[0];
+//                    col += direction[1];
+//                }
+//            }
+//            return moves;
+//        }
+//
+//        public int[] knightMoves(ChessBoard board) {
+//            int [][] directions = {{2,1},{2,-1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2}};
+//            for (int[] direction: directions) {
+//                int row = myPosition.getRow() + direction[0];
+//                int col = myPosition.getColumn() + direction[1];
+//                while (board.isVaildPosition(row,col)) {
+//                    ChessPosition newPosition = new ChessPosition(row,col);
+//                    moves.add(new ChessMove(myPosition,newPosition,null));
+//                }
+//            }
+//            return moves;
+//        }
+//        public ChessMove rookMoves(ChessBoard board) {
+//            int [][] directions = {{1,0},{0,1},{-1,0},{0,-1}};
+//            for (int[] direction: directions) {
+//                int row = myPosition.getRow() + direction[0];
+//                int col = myPosition.getColumn() + direction[1];
+//                while (board.isVaildPosition(row, col)) {
+//                    ChessPosition newPosition = new ChessPosition(row, col);
+//                    moves.add(new ChessMove(myPosition, newPosition, null));
+//                    row += direction[0];
+//                    col += direction[1];
+//                }
+//            }
+//            return moves;
+//        }
+//        public ChessMove pawnMoves(ChessBoard board) {
+//            if(myPosition == [][])
+//        }
+        switch (getPieceType()) {
             case KING:
-
+                int [][] kingDirections = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+                for (int[] direction: kingDirections) {
+                    int row = myPosition.getRow() + direction[0];
+                    int col = myPosition.getColumn() + direction[1];
+                    while (board.isVaildPosition(row, col) && board.isTaken(row,col)) {
+                        ChessPosition newPosition = new ChessPosition(row, col);
+                        moves.add(new ChessMove(myPosition, newPosition, null));
+                    }
+                }
+                return moves;
             case QUEEN:
+                int [][] queenDirections = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+                moves.add(calc(board, myPosition, queenDirections));
+                return moves;
             case BISHOP:
+                int [][] bishopDirections = {{1,1},{1,-1},{-1,1},{-1,-1}};
+                moves.add(calc(board, myPosition, bishopDirections));
             case KNIGHT:
             case ROOK:
+                int [][] rookDirections = {{1,0},{0,1},{-1,0},{0,-1}};
+                moves.add(calc(board, myPosition, rookDirections));
             case PAWN:
         }
-
         return moves;
+    }
+
+    private ChessMove calc(ChessBoard board, ChessPosition myPosition, int[][] directions) {
+        ChessMove move = new ChessMove(myPosition,null,null);
+        for (int[] direction: directions) {
+            int row = myPosition.getRow() + direction[0];
+            int col = myPosition.getColumn() + direction[1];
+            while (board.isVaildPosition(row, col)) {
+                ChessPosition newPosition = new ChessPosition(row, col);
+//                moves.add(new ChessMove(myPosition, newPosition, null));
+                move = new ChessMove(myPosition,newPosition,null);
+                row += direction[0];
+                col += direction[1];
+//                return move;
+            }
+        }
+        return move;
     }
 }

@@ -45,4 +45,8 @@ public class ChessBoard {
     public boolean isVaildPosition(int row,int col) {
         return row <= 8 && col <= 8;
     }
+    public boolean isTaken(int row, int col) {
+        ChessPosition position = new ChessPosition(row,col);
+        return getPiece(position) != null;
+    }
 }

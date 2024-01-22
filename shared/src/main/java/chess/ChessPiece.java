@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -46,6 +47,27 @@ public class ChessPiece {
         return type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -56,6 +78,32 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 //        throw new RuntimeException("Not implemented");
         Collection<ChessMove> moves = new HashSet<>();
+        public ChessMove kingMoves(ChessBoard board) {
+            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+            for (int[] direction: directions) {
+                int row = myPosition.getRow() + direction[0];
+                int col = myPosition.getColumn() + direction[1];
+                while (board.isVaildPosition(row, col) && board.isTaken(row,col)) {
+                    ChessPosition newPosition = new ChessPosition(row, col);
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                }
+            }
+            return moves;
+        }
+        public ChessMove queenMoves(ChessBoard board) {
+            int [][] directions = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+            for (int[] direction: directions) {
+                int row = myPosition.getRow() + direction[0];
+                int col = myPosition.getColumn() + direction[1];
+                while (board.isVaildPosition(row, col)) {
+                    ChessPosition newPosition = new ChessPosition(row, col);
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    row += direction[0];
+                    col += direction[1];
+                }
+            }
+            return moves;
+        }
         public Collection<ChessMove> bishopMoves(ChessBoard board) {
             int [][] directions = {{1,1},{1,-1},{-1,1},{-1,-1}};
             for (int[] direction: directions) {
@@ -77,11 +125,28 @@ public class ChessPiece {
                 int row = myPosition.getRow() + direction[0];
                 int col = myPosition.getColumn() + direction[1];
                 while (board.isVaildPosition(row,col)) {
-                    int [][] positions;
-                    positions.
-
+                    ChessPosition newPosition = new ChessPosition(row,col);
+                    moves.add(new ChessMove(myPosition,newPosition,null));
                 }
             }
+            return moves;
+        }
+        public ChessMove rookMoves(ChessBoard board) {
+            int [][] directions = {{1,0},{0,1},{-1,0},{0,-1}};
+            for (int[] direction: directions) {
+                int row = myPosition.getRow() + direction[0];
+                int col = myPosition.getColumn() + direction[1];
+                while (board.isVaildPosition(row, col)) {
+                    ChessPosition newPosition = new ChessPosition(row, col);
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    row += direction[0];
+                    col += direction[1];
+                }
+            }
+            return moves;
+        }
+        public ChessMove pawnMoves(ChessBoard board) {
+
         }
         switch (type) {
             case KING:

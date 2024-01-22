@@ -56,6 +56,43 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 //        throw new RuntimeException("Not implemented");
         Collection<ChessMove> moves = new HashSet<>();
+        public Collection<ChessMove> bishopMoves(ChessBoard board) {
+            int [][] directions = {{1,1},{1,-1},{-1,1},{-1,-1}};
+            for (int[] direction: directions) {
+                int row = myPosition.getRow() + direction[0];
+                int col = myPosition.getColumn() + direction[1];
+                while (board.isVaildPosition(row,col)){
+                    ChessPosition newPosition = new ChessPosition(row,col);
+                    moves.add(new ChessMove(myPosition,newPosition,null));
+                    row += direction[0];
+                    col += direction[1];
+                }
+            }
+            return moves;
+        }
 
+        public int[] knightMoves(ChessBoard board) {
+            int [][] directions = {{2,1},{2,-1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2}};
+            for (int[] direction: directions) {
+                int row = myPosition.getRow() + direction[0];
+                int col = myPosition.getColumn() + direction[1];
+                while (board.isVaildPosition(row,col)) {
+                    int [][] positions;
+                    positions.
+
+                }
+            }
+        }
+        switch (type) {
+            case KING:
+
+            case QUEEN:
+            case BISHOP:
+            case KNIGHT:
+            case ROOK:
+            case PAWN:
+        }
+
+        return moves;
     }
 }

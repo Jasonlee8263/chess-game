@@ -42,4 +42,7 @@ public class ChessBoard {
 //        ChessPiece [][] new_squares = new ChessPiece[8][8];
         squares = new ChessPiece[8][8];
     }
+    public boolean isVaildPosition(int row,int col) {
+        return row <= 8 && col <= 8;
+    }
 }

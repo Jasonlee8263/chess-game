@@ -60,12 +60,11 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-//        throw new RuntimeException("Not implemented");
-//        ChessPiece [][] new_squares = new ChessPiece[8][8];
         squares = new ChessPiece[8][8];
+
     }
     public boolean isVaildPosition(int row,int col) {
-        return row>=0 && col >=0 && row <= 8 && col <= 8;
+        return row>0 && col >0 && row <= 8 && col <= 8;
     }
     public boolean isTaken(int row, int col) {
         ChessPosition position = new ChessPosition(row,col);

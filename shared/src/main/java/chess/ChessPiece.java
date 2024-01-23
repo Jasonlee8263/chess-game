@@ -76,7 +76,6 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-//        throw new RuntimeException("Not implemented");
         Collection<ChessMove> moves = new HashSet<>();
         switch (board.getPiece(myPosition).getPieceType()) {
             case KING:
@@ -84,22 +83,18 @@ public class ChessPiece {
                 for (int[] direction: kingDirections) {
                     int row = myPosition.getRow() + direction[0];
                     int col = myPosition.getColumn() + direction[1];
-                    while (board.isVaildPosition(row, col)) {
+                    if (board.isValidPosition(row, col)) {
                         ChessPosition newPosition = new ChessPosition(row, col);
                         if(board.getPiece(newPosition) ==null){
                             moves.add(new ChessMove(myPosition, newPosition, null));
-                            row += direction[0];
-                            col += direction[1];
                         }
                         else{
                             if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
-                                break;
+                                continue;
                             }
                             else{
                                 moves.add(new ChessMove(myPosition, newPosition, null));
-                                row += direction[0];
-                                col += direction[1];
-                                break;
+                                continue;
                             }
                         }
                     }
@@ -118,7 +113,7 @@ public class ChessPiece {
                 for (int[] direction: directions) {
                     int row = myPosition.getRow() + direction[0];
                     int col = myPosition.getColumn() + direction[1];
-                    if (board.isVaildPosition(row,col)) {
+                    if (board.isValidPosition(row,col)) {
                         ChessPosition newPosition = new ChessPosition(row,col);
                         if(board.getPiece(newPosition) ==null){
                             moves.add(new ChessMove(myPosition, newPosition, null));
@@ -166,7 +161,7 @@ public class ChessPiece {
         for (int[] direction: directions) {
             int row = myPosition.getRow() + direction[0];
             int col = myPosition.getColumn() + direction[1];
-            while (board.isVaildPosition(row, col)) {
+            while (board.isValidPosition(row, col)) {
                 ChessPosition newPosition = new ChessPosition(row, col);
                 if(board.getPiece(newPosition) ==null){
                     moves.add(new ChessMove(myPosition, newPosition, null));

@@ -63,7 +63,7 @@ public class ChessBoard {
         squares = new ChessPiece[8][8];
 
     }
-    public boolean isVaildPosition(int row,int col) {
+    public boolean isValidPosition(int row, int col) {
         return row>0 && col >0 && row <= 8 && col <= 8;
     }
     public boolean isTaken(int row, int col) {

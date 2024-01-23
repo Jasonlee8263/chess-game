@@ -158,7 +158,6 @@ public class ChessPiece {
                                 moves.add(new ChessMove(myPosition,newPosition2,null));
                             }
                         }
-//                        moves.add(new ChessMove(myPosition,newPosition2,null));
                     }
                     for (int[] diagonal:whiteDiagonals) {
                         int row = myPosition.getRow()+diagonal[0];
@@ -176,15 +175,6 @@ public class ChessPiece {
                                     moves.add(new ChessMove(myPosition,newPosition3,null));
                                 }
                             }
-//                            else{
-//                                if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition3).getTeamColor()) {
-//                                    continue;
-//                                }
-//                                else {
-//                                    moves.add(new ChessMove(myPosition,newPosition3,null));
-//                                    continue;
-//                                }
-//                            }
                         }
                     }
                 }
@@ -211,7 +201,6 @@ public class ChessPiece {
                                 moves.add(new ChessMove(myPosition,newPosition2,null));
                             }
                         }
-//                        moves.add(new ChessMove(myPosition,newPosition2,null));
                     }
                     for (int[] diagonal:blackDiagonals) {
                         int row = myPosition.getRow()+diagonal[0];
@@ -229,15 +218,6 @@ public class ChessPiece {
                                     moves.add(new ChessMove(myPosition,newPosition3,null));
                                 }
                             }
-//                            else{
-//                                if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition3).getTeamColor()) {
-//                                    continue;
-//                                }
-//                                else {
-//                                    moves.add(new ChessMove(myPosition,newPosition3,null));
-//                                    continue;
-//                                }
-//                            }
                         }
                     }
                 }

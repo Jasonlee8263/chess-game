@@ -117,17 +117,13 @@ public class ChessPiece {
                         ChessPosition newPosition = new ChessPosition(row,col);
                         if(board.getPiece(newPosition) ==null){
                             moves.add(new ChessMove(myPosition, newPosition, null));
-                            row += direction[0];
-                            col += direction[1];
                         }
                         else{
                             if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
-                                break;
+                                continue;
                             }
                             else{
                                 moves.add(new ChessMove(myPosition, newPosition, null));
-                                row += direction[0];
-                                col += direction[1];
                             }
                         }
                         moves.add(new ChessMove(myPosition,newPosition,null));
@@ -142,16 +138,17 @@ public class ChessPiece {
                 int [][] diagonals = {{1,-1},{1,1}};
                 if(myPosition.getRow()==2){
                     ChessPosition newPosition = new ChessPosition(myPosition.getRow()+2, myPosition.getColumn());
+                    moves.add(new ChessMove(myPosition,newPosition,null));
                 }
 //                for (int[] diagonal:diagonals) {
 //                    int row = myPosition.getRow()+diagonal[0];
 //                    int col = myPosition.getColumn()+diagonal[1];
-//                    if(board.isVaildPosition(row,col)){
+//                    if(board.isValidPosition(row,col) && board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
 //                        ChessPosition newPosition = new ChessPosition(row,col);
-//                        if(board.getPiece(newPosition).)
+////                        if(board.getPiece(newPosition).)
 //                    }
 //                }
-////                if(myPosition)
+//                if(myPosition)
                 break;
         }
         return moves;

@@ -21,7 +21,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        squares[position.getRow()][position.getColumn()] = piece;
+        squares[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return squares[position.getRow()][position.getColumn()];
+        return squares[position.getRow()-1][position.getColumn()-1];
     }
 
     /**
@@ -65,7 +65,7 @@ public class ChessBoard {
         squares = new ChessPiece[8][8];
     }
     public boolean isVaildPosition(int row,int col) {
-        return row <= 8 && col <= 8;
+        return row>=0 && col >=0 && row <= 8 && col <= 8;
     }
     public boolean isTaken(int row, int col) {
         ChessPosition position = new ChessPosition(row,col);

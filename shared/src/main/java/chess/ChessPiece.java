@@ -179,6 +179,7 @@ public class ChessPiece {
                 int [][] rookDirections = {{1,0},{0,1},{-1,0},{0,-1}};
                 calc(board, myPosition, moves, rookDirections);
             case PAWN:
+//                if()
         }
         return moves;
     }
@@ -189,6 +190,12 @@ public class ChessPiece {
             int col = myPosition.getColumn() + direction[1];
             while (board.isVaildPosition(row, col)) {
                 ChessPosition newPosition = new ChessPosition(row, col);
+                if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
+                    break;
+                }
+//                else if () {
+//
+//                }
                 moves.add(new ChessMove(myPosition, newPosition, null));
                 row += direction[0];
                 col += direction[1];

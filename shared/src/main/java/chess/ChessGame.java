@@ -71,6 +71,7 @@ private ChessBoard curboard;
     public boolean isInCheck(TeamColor teamColor) {
         if(teamColor==TeamColor.WHITE) {
             ChessBoard copyboard = curboard;
+            do
         }
     }
 

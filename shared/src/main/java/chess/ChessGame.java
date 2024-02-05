@@ -49,7 +49,9 @@ private ChessBoard curboard;
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        curboard.getPiece(startPosition);
+        Collection<ChessMove> moves = new HashSet<>();
+        moves = curboard.getPiece(startPosition).pieceMoves(curboard,startPosition);
+
     }
 
     /**
@@ -69,10 +71,10 @@ private ChessBoard curboard;
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        if(teamColor==TeamColor.WHITE) {
-            ChessBoard copyboard = curboard;
-            do
-        }
+//        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = curboard.findKing(teamColor);
+        TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+
     }
 
     /**

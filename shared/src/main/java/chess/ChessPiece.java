@@ -79,29 +79,23 @@ public class ChessPiece {
         Collection<ChessMove> moves = new HashSet<>();
         switch (board.getPiece(myPosition).getPieceType()) {
             case KING:
-                int [][] kingDirections = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
-                for (int[] direction: kingDirections) {
+                int [][] kingDirection = {{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1},{0,-1}};
+                for(int[]direction:kingDirection) {
                     int row = myPosition.getRow() + direction[0];
                     int col = myPosition.getColumn() + direction[1];
+                    ChessPosition newPosition = new ChessPosition(row, col);
                     if (board.isValidPosition(row, col)) {
-                        ChessPosition newPosition = new ChessPosition(row, col);
-                        if(board.getPiece(newPosition) ==null){
-                            moves.add(new ChessMove(myPosition, newPosition, null));
+                        if(board.getPiece(newPosition)==null) {
+                            moves.add(new ChessMove(myPosition,newPosition,null));
                         }
-                        else{
-                            if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
-                                continue;
-                            }
-                            else{
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                                continue;
-                            }
+                        else if (board.getPiece(myPosition).pieceColor != board.getPiece(newPosition).pieceColor) {
+                            moves.add(new ChessMove(myPosition, newPosition, null));
                         }
                     }
                 }
                 break;
             case QUEEN:
-                int [][] queenDirections = {{1,0},{1,1},{1,-1},{0,1},{1,1},{1,-1},{-1,0},{-1,1},{-1,-1},{0,-1},{-1,1},{-1,-1}};
+                int [][] queenDirections = {{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1},{0,-1}};
                 calc(board, myPosition, moves, queenDirections);
                 break;
             case BISHOP:
@@ -109,24 +103,18 @@ public class ChessPiece {
                 calc(board, myPosition, moves, bishopDirections);
                 break;
             case KNIGHT:
-                int [][] directions = {{2,1},{2,-1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2}};
-                for (int[] direction: directions) {
+                int [][] knightDirection = {{2,-1},{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2}};
+                for(int[]direction:knightDirection) {
                     int row = myPosition.getRow() + direction[0];
                     int col = myPosition.getColumn() + direction[1];
-                    if (board.isValidPosition(row,col)) {
-                        ChessPosition newPosition = new ChessPosition(row,col);
-                        if(board.getPiece(newPosition) ==null){
+                    ChessPosition newPosition = new ChessPosition(row, col);
+                    if (board.isValidPosition(row, col)) {
+                        if(board.getPiece(newPosition)==null) {
+                            moves.add(new ChessMove(myPosition,newPosition,null));
+                        }
+                        else if (board.getPiece(myPosition).pieceColor != board.getPiece(newPosition).pieceColor) {
                             moves.add(new ChessMove(myPosition, newPosition, null));
                         }
-                        else{
-                            if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
-                                continue;
-                            }
-                            else{
-                                moves.add(new ChessMove(myPosition, newPosition, null));
-                            }
-                        }
-                        moves.add(new ChessMove(myPosition,newPosition,null));
                     }
                 }
                 break;
@@ -234,20 +222,15 @@ public class ChessPiece {
                 ChessPosition newPosition = new ChessPosition(row, col);
                 if(board.getPiece(newPosition) ==null){
                     moves.add(new ChessMove(myPosition, newPosition, null));
-                    row += direction[0];
-                    col += direction[1];
                 }
-                else{
-                    if(board.getPiece(myPosition).getTeamColor()==board.getPiece(newPosition).getTeamColor()){
-                        break;
+                else {
+                    if(board.getPiece(myPosition).getTeamColor()!=board.getPiece(newPosition).getTeamColor()) {
+                        moves.add(new ChessMove(myPosition,newPosition,null));
                     }
-                    else{
-                        moves.add(new ChessMove(myPosition, newPosition, null));
-                        row += direction[0];
-                        col += direction[1];
-                        break;
-                    }
+                    break;
                 }
+                row += direction[0];
+                col += direction[1];
             }
         }
     }

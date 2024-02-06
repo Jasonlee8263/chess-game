@@ -49,10 +49,24 @@ private ChessBoard curboard;
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Collection<ChessMove> moves = new HashSet<>();
-        moves = curboard.getPiece(startPosition).pieceMoves(curboard,startPosition);
-
+        ChessPiece piece = curboard.getPiece(startPosition);
+        if((piece != null) && (piece.getTeamColor() == curTurn)) {
+            moves = piece.pieceMoves(curboard,startPosition);
+            for(ChessMove move:moves) {
+                ChessBoard newBoard = curboard.copy();
+                newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(startPosition));
+                newBoard.addPiece(move.getStartPosition(),null);
+                curboard = newBoard;
+                if(!isInCheck(curTurn)){
+                    moves.add(move);
+                }
+                curboard = curboard.copy();
+            }
+        }
+        return moves;
     }
 
     /**
@@ -62,7 +76,24 @@ private ChessBoard curboard;
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessBoard newBoard = new ChessBoard();
+        newBoard = curboard.copy();
+        newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(move.getStartPosition()));
+        newBoard.addPiece(move.getStartPosition(),null);
+        ChessPiece simulate = newBoard.getPiece(move.getEndPosition());
+        curboard = newBoard;
+        if(simulate!=null && simulate.equals(move.getEndPosition())){
+            curboard = curboard.copy();
+            throw new InvalidMoveException("Invalid Move");
+        }
+        else if(isInCheck(curTurn)){
+            curboard = curboard.copy();
+            throw new InvalidMoveException("Invalid Move");
+        }
+        else if(curTurn!=getTeamTurn()) {
+            curboard = curboard.copy();
+            throw new InvalidMoveException("Invalid Move");
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -74,9 +75,12 @@ private ChessBoard curboard;
 //        throw new RuntimeException("Not implemented");
         ChessPosition kingPosition = curboard.findKing(teamColor);
         TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-        for(ChessPiece piece:curboard.getAllPieces(opposingTeam)) {
-            piece.pieceMoves(curboard,)
+        for(ChessPosition position:curboard.getAllPositions(opposingTeam)) {
+            if(curboard.getPiece(position).pieceMoves(curboard,position).stream().anyMatch(chessMove -> chessMove.getEndPosition().equals(kingPosition))){
+                return true;
+            }
         }
+        return false;
     }
 
     /**

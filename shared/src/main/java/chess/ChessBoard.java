@@ -69,13 +69,13 @@ public class ChessBoard {
         return null;
     }
 
-    public List<ChessPiece> getAllPieces(ChessGame.TeamColor teamColor) {
-        List<ChessPiece> pieces = new ArrayList<>();
+    public List<ChessPosition> getAllPositions(ChessGame.TeamColor teamColor) {
+        List<ChessPosition> pieces = new ArrayList<>();
         for(int i=0;i<8;i++) {
             for(int j=0;j<8;j++) {
                 ChessPiece piece = squares[i][j];
                 if(piece!=null && piece.getTeamColor()==teamColor) {
-                    pieces.add(piece);
+                    pieces.add(new ChessPosition(i+1,j+1));
                 }
             }
         }

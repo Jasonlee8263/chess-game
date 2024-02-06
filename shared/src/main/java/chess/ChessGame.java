@@ -72,7 +72,6 @@ private ChessBoard curboard;
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-//        throw new RuntimeException("Not implemented");
         ChessPosition kingPosition = curboard.findKing(teamColor);
         TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
         for(ChessPosition position:curboard.getAllPositions(opposingTeam)) {
@@ -90,7 +89,10 @@ private ChessBoard curboard;
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if(isInCheck(teamColor) && isInStalemate(teamColor)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -101,7 +103,19 @@ private ChessBoard curboard;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+        for(ChessPosition position:curboard.getAllPositions(opposingTeam)) {
+            for(ChessMove move:curboard.getPiece(position).pieceMoves(curboard,position)){
+                ChessBoard newboard = curboard;
+                newboard.addPiece(move.getEndPosition(),newboard.getPiece(position));
+                newboard.addPiece(position,null);
+                if(isInCheck(teamColor)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 
     /**

@@ -74,7 +74,9 @@ private ChessBoard curboard;
 //        throw new RuntimeException("Not implemented");
         ChessPosition kingPosition = curboard.findKing(teamColor);
         TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-
+        for(ChessPiece piece:curboard.getAllPieces(opposingTeam)) {
+            piece.pieceMoves(curboard,)
+        }
     }
 
     /**

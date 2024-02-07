@@ -87,7 +87,7 @@ public class ChessBoard {
         for (int row = 1; row <= 8; row++) {
             for (int col = 1; col <= 8; col++) {
                 ChessPosition position = new ChessPosition(row, col);
-                ChessPiece piece = copiedBoard.getPiece(position);
+                ChessPiece piece = this.getPiece(position);
                 if (piece != null) {
                     copiedBoard.addPiece(position, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
                 }

@@ -52,21 +52,23 @@ private ChessBoard curboard;
 
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Collection<ChessMove> moves = new HashSet<>();
+        Collection<ChessMove> valMoves = new HashSet<>();
         ChessPiece piece = curboard.getPiece(startPosition);
-        if((piece != null) && (piece.getTeamColor() == curTurn)) {
+        if(piece != null) {
             moves = piece.pieceMoves(curboard,startPosition);
             for(ChessMove move:moves) {
+                ChessBoard originBoard = curboard.copy();
                 ChessBoard newBoard = curboard.copy();
                 newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(startPosition));
                 newBoard.addPiece(move.getStartPosition(),null);
                 curboard = newBoard;
-                if(!isInCheck(curTurn)){
-                    moves.add(move);
+                if(!isInCheck(newBoard.getPiece(move.getEndPosition()).getTeamColor())){
+                    valMoves.add(move);
                 }
-                curboard = curboard.copy();
+                curboard = originBoard;
             }
         }
-        return moves;
+        return valMoves;
     }
 
     /**
@@ -75,25 +77,56 @@ private ChessBoard curboard;
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
+
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessBoard newBoard = new ChessBoard();
+        ChessBoard originalBoard = new ChessBoard();
         newBoard = curboard.copy();
-        newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(move.getStartPosition()));
-        newBoard.addPiece(move.getStartPosition(),null);
+        ChessPiece startPiece = newBoard.getPiece(move.getStartPosition());
+        ChessPiece originalPosPiece = newBoard.getPiece(move.getEndPosition());
+        if(startPiece!=null && startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor()==TeamColor.WHITE && move.getEndPosition().getRow()==8){
+            ChessPiece newPiece = new ChessPiece(newBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());
+            newBoard.addPiece(move.getEndPosition(),newPiece);
+            newBoard.addPiece(move.getStartPosition(),null);
+        }
+        else if(startPiece!=null && startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor()==TeamColor.BLACK && move.getEndPosition().getRow()==1){
+            ChessPiece newPiece = new ChessPiece(newBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());
+            newBoard.addPiece(move.getEndPosition(),newPiece);
+            newBoard.addPiece(move.getStartPosition(),null);
+        }
+        else if(validMoves(move.getStartPosition()).contains(move)){
+            newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(move.getStartPosition()));
+            newBoard.addPiece(move.getStartPosition(),null);
+        }
+        else {
+            throw new InvalidMoveException("Invalid Move");
+        }
+        TeamColor nextTurn = (curTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
         ChessPiece simulate = newBoard.getPiece(move.getEndPosition());
+        if(newBoard.getPiece(move.getEndPosition()).getTeamColor()!=curTurn){
+            throw new InvalidMoveException("Invalid Move");
+        }
         curboard = newBoard;
-        if(simulate!=null && simulate.equals(move.getEndPosition())){
-            curboard = curboard.copy();
-            throw new InvalidMoveException("Invalid Move");
-        }
-        else if(isInCheck(curTurn)){
-            curboard = curboard.copy();
-            throw new InvalidMoveException("Invalid Move");
-        }
-        else if(curTurn!=getTeamTurn()) {
-            curboard = curboard.copy();
-            throw new InvalidMoveException("Invalid Move");
-        }
+        curTurn = nextTurn;
+//        if(simulate!=null && simulate.equals(move.getEndPosition())){
+//            curboard = curboard.copy();
+//            throw new InvalidMoveException("Invalid Move");
+//        }
+//        else if(validMoves(move.getStartPosition()).contains(move)){
+//            curboard = curboard.copy();
+//            throw new InvalidMoveException("Invalid Move");
+//
+//        }
+//        else if(isInCheck(curTurn)){
+//            curboard = curboard.copy();
+//            throw new InvalidMoveException("Invalid Move");
+//        }
+//        if(curTurn!=newBoard.getPiece(move.getEndPosition()).getTeamColor()) {
+//            throw new InvalidMoveException("Invalid Move");
+//        }
+//        if(!validMoves(move.getStartPosition()).contains(move)) {
+//            throw new InvalidMoveException("Invalid Move");
+//        }
     }
 
     /**
@@ -134,20 +167,21 @@ private ChessBoard curboard;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        TeamColor opposingTeam = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-        for(ChessPosition position:curboard.getAllPositions(opposingTeam)) {
-            for(ChessMove move:curboard.getPiece(position).pieceMoves(curboard,position)){
-                ChessBoard newboard = curboard;
-                newboard.addPiece(move.getEndPosition(),newboard.getPiece(position));
-                newboard.addPiece(position,null);
-                if(isInCheck(teamColor)) {
-                    return true;
-                }
-            }
+        if (validMoves(curboard.findKing(teamColor)).isEmpty()) {
+            return true;
         }
         return false;
-
     }
+//        if(!isInCheck(teamColor)) {
+//            return false;
+//        }
+//        return true;
+//        for(ChessPosition position:curboard.getAllPositions(teamColor)) {
+//            if(validMoves(position)!=null) {
+//                return false;
+//            }
+//        }
+//        return true;
 
     /**
      * Sets this game's chessboard with a given board

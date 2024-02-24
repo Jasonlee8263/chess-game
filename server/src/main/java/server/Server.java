@@ -11,6 +11,11 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
 
+        Spark.delete("/db",(Request req,Response res)->{
+            System.out.println("deleting database");
+            return ;
+        });
+
         Spark.awaitInitialization();
         return Spark.port();
     }

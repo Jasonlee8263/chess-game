@@ -3,30 +3,32 @@ package dataAccess;
 import model.GameData;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO{
+    private Collection<GameData> gameData = new HashSet<>();
     @Override
     public GameData createGame(GameData game) {
         return null;
     }
 
     @Override
-    public GameData getGame(GameData game) throws DataAccessException{
+    public GameData getGame(GameData game){
         return null;
     }
 
     @Override
-    public Collection<GameData> listGame(GameData game) throws DataAccessException{
+    public Collection<GameData> listGame(GameData game){
         return null;
     }
 
     @Override
-    public GameData updateGame(GameData game) throws DataAccessException{
+    public GameData updateGame(GameData game){
         return null;
     }
 
     @Override
-    public void clear() throws DataAccessException {
-
+    public void clear(){
+        gameData.clear();
     }
 }

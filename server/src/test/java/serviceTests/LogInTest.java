@@ -3,7 +3,6 @@ package serviceTests;
 import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import model.GameData;
@@ -11,7 +10,6 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.ClearService;
 import service.LogInRequest;
 import service.LogInResult;
 import service.LogInService;
@@ -20,7 +18,6 @@ public class LogInTest {
     private static LogInService logInService;
     static MemoryUserDAO memoryUserDAO = new MemoryUserDAO();
     static MemoryAuthDAO memoryAuthDAO = new MemoryAuthDAO();
-    static MemoryGameDAO memoryGameDAO = new MemoryGameDAO();
 
     @BeforeAll
     public static void createLogInService() {

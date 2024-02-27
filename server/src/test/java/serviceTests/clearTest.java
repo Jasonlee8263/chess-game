@@ -33,10 +33,9 @@ public class clearTest {
     @Test
     public void testClear() throws DataAccessException {
         clearService.clear();
-        int expected = 0;
-        Assertions.assertEquals(expected,memoryUserDAO.getUserData().size());
-        Assertions.assertEquals(expected,memoryAuthDAO.getAuthData().size());
-        Assertions.assertEquals(expected,memoryGameDAO.listGame().size());
+        Assertions.assertEquals(0,memoryUserDAO.getUserData().size());
+        Assertions.assertEquals(0,memoryAuthDAO.getAuthData().size());
+        Assertions.assertEquals(0,memoryGameDAO.listGame().size());
     }
 
 }

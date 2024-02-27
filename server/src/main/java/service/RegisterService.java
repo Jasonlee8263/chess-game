@@ -14,13 +14,13 @@ public class RegisterService {
         this.userDAO = userDAO;
         this.authDAO = authDAO;
     }
-    public Object register(RegisterRequest request){
+    public RegisterResult register(RegisterRequest request){
         UserData user = new UserData(request.username(), request.password(), request.email());
         if(user.username()==null || user.password()==null || user.email()==null){
-            return new RegisterResult(request.username(), null,"Error: bad request");
+            return new RegisterResult(null, null,"Error: bad request");
         }
         else if(userDAO.getUser(user.username())!=null && userDAO.getUser(user.username()).username().equals(user.username())){
-            return new RegisterResult(request.username(), null,"\"message\": \"Error: already taken\"");
+            return new RegisterResult(null, null,"Error: already taken");
         }
         else{
             userDAO.createUser(user);

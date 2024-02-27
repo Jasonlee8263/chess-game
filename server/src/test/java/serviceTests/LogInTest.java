@@ -29,7 +29,7 @@ public class LogInTest {
     @Test
     public void testLogIn() throws DataAccessException{
         LogInResult actual = logInService.login(new LogInRequest("test1","1234"));
-        LogInResult expected  = new LogInResult("test1","1234");
+        LogInResult expected  = new LogInResult("test1","1234","pass");
         Assertions.assertEquals(expected.username(),actual.username());
 //        Assertions.assertThrows()
     }

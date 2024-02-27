@@ -8,10 +8,13 @@ import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO{
     private Collection<GameData> gameDataHashSet = new HashSet<>();
+    public int gameID = 1;
     @Override
-    public GameData createGame(GameData game) {
-        gameDataHashSet.add(game);
-        return game;
+    public GameData createGame(String gameName) {
+        GameData newGame = new GameData(gameID,null,null,gameName,null);
+        gameDataHashSet.add(newGame);
+        gameID++;
+        return newGame;
     }
 
     @Override

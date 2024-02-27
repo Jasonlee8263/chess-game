@@ -12,10 +12,15 @@ public class LogOutHandler {
         this.authDAO = authDAO;
     }
     public Object logout(Request req, Response res) throws DataAccessException {
-            String authToken =  req.headers("Authorization");
+            String authToken = req.headers("Authorization");
             LogOutService logOutService = new LogOutService(authDAO);
-            logOutService.delete(authToken);
-            res.status(200);
+            String result = logOutService.delete(authToken);
+            if(result=="Error: unauthorized"){
+                res.status(401);
+            }
+            else{
+                res.status(200);
+            }
             return "{}";
 
     }

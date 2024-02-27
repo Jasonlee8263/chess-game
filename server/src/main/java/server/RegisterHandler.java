@@ -20,8 +20,16 @@ public class RegisterHandler {
         Gson gson = new Gson();
         RegisterRequest request = gson.fromJson(req.body(),RegisterRequest.class);
         RegisterService registerService = new RegisterService(authDAO,userDAO);
-        RegisterResult result = (RegisterResult) registerService.register(request);
-        res.status(200);
+        RegisterResult result = registerService.register(request);
+        if(result.message()=="Error: bad request"){
+            res.status(400);
+        }
+        else if(result.message()=="Error: already taken"){
+            res.status(403);
+        }
+        else{
+            res.status(200);
+        }
         return gson.toJson(result);
     }
 }

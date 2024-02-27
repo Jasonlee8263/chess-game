@@ -27,7 +27,7 @@ public class clearTest {
 
         memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
         memoryAuthDAO.createAuth(new AuthData("testAuthToken","test1"));
-        memoryGameDAO.createGame(new GameData(1,"white","black","testGame",new ChessGame()));
+        memoryGameDAO.createGame("test1");
     }
 
     @Test

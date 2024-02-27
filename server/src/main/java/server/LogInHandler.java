@@ -20,7 +20,12 @@ public class LogInHandler {
         LogInRequest request = gson.fromJson(req.body(), LogInRequest.class);
         LogInService logInService = new LogInService(authDAO, userDAO);
         LogInResult result = logInService.login(request);
-        res.status(200);
+        if(result.message()=="Error: unauthorized"){
+            res.status(401);
+        }
+        else{
+            res.status(200);
+        }
         return gson.toJson(result);
 
     }

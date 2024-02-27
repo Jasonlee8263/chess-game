@@ -10,7 +10,11 @@ public class LogOutService {
     public LogOutService(MemoryAuthDAO authDAO){
         this.authDAO = authDAO;
     }
-    public void delete(String authToken) throws DataAccessException {
+    public String delete(String authToken) throws DataAccessException {
+        if(authDAO.getAuth(authToken)==null){
+            return "Error: unauthorized";
+        }
         authDAO.deleteAuth(authToken);
+        return "";
     }
 }

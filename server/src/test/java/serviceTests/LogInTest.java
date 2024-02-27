@@ -24,9 +24,9 @@ public class LogInTest {
 
     @BeforeAll
     public static void createLogInService() {
-        logInService = new LogInService(memoryAuthDAO,memoryUserDAO);
+        logInService = new LogInService(memoryAuthDAO, memoryUserDAO);
 
-        memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
+        memoryUserDAO.createUser(new UserData("test1", "1234", "test@gmail.com"));
 
     }
     @Test

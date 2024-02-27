@@ -17,10 +17,9 @@ public class LogInService {
         this.userDAO = userDAO;
     }
     public LogInResult login(LogInRequest request) {
-//        if(request.username()==userDAO.getUser().username())
         if((userDAO.getUser(request.username()).username().equals(request.username()) && (userDAO.getUser(request.username()).password().equals(request.password())))) {
-            AuthData auth = authDAO.createAuth(new AuthData(request.username(), UUID.randomUUID().toString()));
-            String authToken = auth.authToken();
+            String authToken = UUID.randomUUID().toString();
+            authDAO.createAuth(new AuthData(request.username(), authToken));
             return new LogInResult(request.username(), authToken);
         }
         return null;

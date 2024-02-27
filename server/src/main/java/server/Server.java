@@ -6,9 +6,9 @@ import dataAccess.MemoryUserDAO;
 import spark.*;
 
 public class Server {
-private MemoryUserDAO userDAO;
-private MemoryGameDAO gameDAO;
-private MemoryAuthDAO authDAO;
+private MemoryUserDAO userDAO = new MemoryUserDAO();
+private MemoryGameDAO gameDAO = new MemoryGameDAO();
+private MemoryAuthDAO authDAO = new MemoryAuthDAO();
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
@@ -16,10 +16,14 @@ private MemoryAuthDAO authDAO;
 
         // Register your endpoints and handle exceptions here.
         ClearHandler clearHandler = new ClearHandler(authDAO,gameDAO,userDAO);
+        RegisterHandler registerHandler = new RegisterHandler(authDAO,userDAO);
         LogInHandler logInHandler = new LogInHandler(authDAO,userDAO);
+        LogOutHandler logOutHandler = new LogOutHandler(authDAO);
 
+        Spark.post("/user",registerHandler::register);
         Spark.delete("/db",clearHandler::clear);
         Spark.post("/session",logInHandler::login);
+        Spark.delete("/session",logOutHandler::logout);
 
         Spark.awaitInitialization();
         return Spark.port();

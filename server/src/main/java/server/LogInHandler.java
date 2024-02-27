@@ -1,10 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.AuthDAO;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
-import dataAccess.UserDAO;
+import dataAccess.*;
 import service.LogInRequest;
 import service.LogInResult;
 import service.LogInService;
@@ -24,7 +21,7 @@ public class LogInHandler {
         LogInService logInService = new LogInService(authDAO, userDAO);
         LogInResult result = logInService.login(request);
         res.status(200);
-//        System.out.println(gson.toJson(result));
         return gson.toJson(result);
+
     }
 }

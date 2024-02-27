@@ -16,9 +16,17 @@ public class RegisterService {
     }
     public Object register(RegisterRequest request){
         UserData user = new UserData(request.username(), request.password(), request.email());
-        userDAO.createUser(user);
-        String authToken = UUID.randomUUID().toString();
-        authDAO.createAuth(new AuthData(request.username(), authToken));
-        return new RegisterResult(request.username(), authToken);
+        if(user.username()==null || user.password()==null || user.email()==null){
+            return new RegisterResult(request.username(), null,"Error: bad request");
+        }
+        else if(userDAO.getUser(user.username())!=null && userDAO.getUser(user.username()).username().equals(user.username())){
+            return new RegisterResult(request.username(), null,"\"message\": \"Error: already taken\"");
+        }
+        else{
+            userDAO.createUser(user);
+            String authToken = UUID.randomUUID().toString();
+            authDAO.createAuth(new AuthData(request.username(), authToken));
+            return new RegisterResult(request.username(), authToken,null);
+        }
     }
 }

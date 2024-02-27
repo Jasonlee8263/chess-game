@@ -108,25 +108,6 @@ private ChessBoard curboard;
         }
         curboard = newBoard;
         curTurn = nextTurn;
-//        if(simulate!=null && simulate.equals(move.getEndPosition())){
-//            curboard = curboard.copy();
-//            throw new InvalidMoveException("Invalid Move");
-//        }
-//        else if(validMoves(move.getStartPosition()).contains(move)){
-//            curboard = curboard.copy();
-//            throw new InvalidMoveException("Invalid Move");
-//
-//        }
-//        else if(isInCheck(curTurn)){
-//            curboard = curboard.copy();
-//            throw new InvalidMoveException("Invalid Move");
-//        }
-//        if(curTurn!=newBoard.getPiece(move.getEndPosition()).getTeamColor()) {
-//            throw new InvalidMoveException("Invalid Move");
-//        }
-//        if(!validMoves(move.getStartPosition()).contains(move)) {
-//            throw new InvalidMoveException("Invalid Move");
-//        }
     }
 
     /**
@@ -172,16 +153,6 @@ private ChessBoard curboard;
         }
         return false;
     }
-//        if(!isInCheck(teamColor)) {
-//            return false;
-//        }
-//        return true;
-//        for(ChessPosition position:curboard.getAllPositions(teamColor)) {
-//            if(validMoves(position)!=null) {
-//                return false;
-//            }
-//        }
-//        return true;
 
     /**
      * Sets this game's chessboard with a given board

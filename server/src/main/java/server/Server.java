@@ -16,10 +16,10 @@ private MemoryAuthDAO authDAO;
 
         // Register your endpoints and handle exceptions here.
         ClearHandler clearHandler = new ClearHandler(authDAO,gameDAO,userDAO);
-        LogInHandler logInHandler = new LogInHandler();
+        LogInHandler logInHandler = new LogInHandler(authDAO,userDAO);
 
         Spark.delete("/db",clearHandler::clear);
-//        Spark.post("/session",logInHandler::login);
+        Spark.post("/session",logInHandler::login);
 
         Spark.awaitInitialization();
         return Spark.port();

@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class MemoryUserDAO implements UserDAO {
-    private Collection<UserData> userDataHashSet = new HashSet<>();
+    private Collection<UserData> userDataHashSet;
+    public MemoryUserDAO(){
+        userDataHashSet = new HashSet<>();
+    }
     @Override
     public UserData createUser(UserData user) {
         userDataHashSet.add(user);
@@ -15,9 +18,9 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public UserData getUser(UserData user){
+    public UserData getUser(String username){
         for (UserData item: userDataHashSet) {
-            if (item.equals(user)){
+            if (item.username().equals(username)){
                 return item;
             }
         }

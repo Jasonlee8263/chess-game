@@ -18,9 +18,8 @@ public class CreateGameService {
             return new CreateGameResult(null,"Error: bad request");
         }
         else{
-            gameDAO.createGame(request.gameName());
-            gameID++;
-            return new CreateGameResult(gameID, null);
+            GameData gameData1 = gameDAO.createGame(request.gameName());
+            return new CreateGameResult(gameData1.gameID(), null);
         }
 
 

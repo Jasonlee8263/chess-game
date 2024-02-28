@@ -10,6 +10,8 @@ import service.CreateGameService;
 import spark.Request;
 import spark.Response;
 
+import java.util.Map;
+
 public class CreateGameHandler {
     private MemoryAuthDAO authDAO;
     private MemoryGameDAO gameDAO;
@@ -25,9 +27,11 @@ public class CreateGameHandler {
         CreateGameResult result = createGameService.createGame(request);
         if(authDAO.getAuth(authToken)==null){
             res.status(401);
+            return new Gson().toJson(Map.of("message","Error: unauthorized"));
         }
         else if(result.message()=="Error: bad request"){
             res.status(400);
+            return new Gson().toJson(Map.of("message","Error: bad request"));
         }
         else{
             res.status(200);

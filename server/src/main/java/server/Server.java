@@ -20,12 +20,14 @@ private MemoryAuthDAO authDAO = new MemoryAuthDAO();
         LogInHandler logInHandler = new LogInHandler(authDAO,userDAO);
         LogOutHandler logOutHandler = new LogOutHandler(authDAO);
         CreateGameHandler createGameHandler = new CreateGameHandler(authDAO,gameDAO);
+        ListGameHandler listGameHandler = new ListGameHandler(authDAO,gameDAO);
 
         Spark.post("/user",registerHandler::register);
         Spark.delete("/db",clearHandler::clear);
         Spark.post("/session",logInHandler::login);
         Spark.delete("/session",logOutHandler::logout);
         Spark.post("/game",createGameHandler::createGame);
+        Spark.get("/game",listGameHandler::listGame);
 
         Spark.awaitInitialization();
         return Spark.port();

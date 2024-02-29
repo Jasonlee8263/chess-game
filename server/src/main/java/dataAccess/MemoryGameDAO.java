@@ -51,34 +51,7 @@ public class MemoryGameDAO implements GameDAO{
             gameDataHashSet.add(game);
         }
     }
-//    public void updateGame(Integer gameID, String userName, String color) {
-//        GameData game = getGame(gameID);
-//        if (game != null) {
-//            String whiteUsername = game.whiteUsername();
-//            String blackUsername = game.blackUsername();
 //
-//            if ("WHITE".equals(color)) {
-//                whiteUsername = userName;
-//            } else if ("BLACK".equals(color)) {
-//                blackUsername = userName;
-//            }
-//
-//            GameData updatedGame = new GameData(gameID, whiteUsername, blackUsername, game.gameName(), game.game());
-//            updateGameData(gameID, updatedGame);
-//        }
-//    }
-//
-//    private void updateGameData(Integer gameID, GameData updatedGame) {
-//        // Find and update the existing GameData object in the collection
-//        for (Iterator<GameData> iterator = gameDataHashSet.iterator(); iterator.hasNext();) {
-//            GameData gameData = iterator.next();
-//            if (gameData.gameID().equals(gameID)) {
-//                iterator.remove(); // Remove the old GameData object
-//                break; // Exit loop once found
-//            }
-//        }
-//        gameDataHashSet.add(updatedGame); // Add the updated GameData object
-//    }
 
     @Override
     public void clear(){

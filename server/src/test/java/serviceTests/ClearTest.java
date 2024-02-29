@@ -1,10 +1,6 @@
 package serviceTests;
 
-import chess.ChessGame;
-import dataAccess.DataAccessException;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -13,9 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import service.ClearService;
 
-import java.util.Collection;
-
-public class clearTest {
+public class ClearTest {
     private static ClearService clearService;
     static MemoryUserDAO memoryUserDAO = new MemoryUserDAO();
     static MemoryAuthDAO memoryAuthDAO = new MemoryAuthDAO();
@@ -25,16 +19,17 @@ public class clearTest {
     public static void createClearService() {
         clearService = new ClearService(memoryAuthDAO,memoryGameDAO,memoryUserDAO);
 
-        memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
-        memoryAuthDAO.createAuth(new AuthData("testAuthToken","test1"));
-        memoryGameDAO.createGame("test1");
+
     }
 
     @Test
     public void testClear() throws DataAccessException {
+        UserData user = memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
+        AuthData auth = memoryAuthDAO.createAuth(new AuthData("testAuthToken","test1"));
+        GameData game = memoryGameDAO.createGame("test1");
         clearService.clear();
-        Assertions.assertEquals(0,memoryUserDAO.getUserData().size());
-        Assertions.assertEquals(0,memoryAuthDAO.getAuthData().size());
+        Assertions.assertNull(memoryUserDAO.getUser(user.username()));
+        Assertions.assertNull(memoryAuthDAO.getAuth(auth.authToken()));
         Assertions.assertEquals(0,memoryGameDAO.listGame().size());
     }
 

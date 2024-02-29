@@ -27,8 +27,8 @@ public class LogOutTest {
     public void testLogOut() throws DataAccessException {
         memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
         AuthData auth = memoryAuthDAO.createAuth(new AuthData("testAuthToken","test1"));
-        Assertions.assertEquals(1,memoryAuthDAO.getAuthData().size());
+        Assertions.assertEquals(auth,memoryAuthDAO.getAuth(auth.authToken()));
         logOutService.delete(auth.authToken());
-        Assertions.assertEquals(0,memoryAuthDAO.getAuthData().size());
+        Assertions.assertNull(memoryAuthDAO.getAuth(auth.authToken()));
     }
 }

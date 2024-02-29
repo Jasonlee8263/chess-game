@@ -7,7 +7,6 @@ import model.GameData;
 public class CreateGameService {
     private MemoryGameDAO gameDAO;
     private MemoryAuthDAO authDAO;
-    private int gameID;
     public CreateGameService(MemoryAuthDAO authDAO,MemoryGameDAO gameDAO){
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;

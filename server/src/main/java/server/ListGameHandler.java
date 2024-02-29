@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
+import service.ListGameResult;
 import service.ListGameService;
 import spark.Request;
 import spark.Response;
@@ -18,11 +19,10 @@ public class ListGameHandler {
         String authToken = req.headers("Authorization");
         Gson gson = new Gson();
         ListGameService listGameService = new ListGameService(authDAO, gameDAO);
+        ListGameResult result = listGameService.listGame(authToken);
         if(authDAO.getAuth(authToken)==null){
             res.status(401);
         }
-        return null;
-
-
+        return gson.toJson(result);
     }
 }

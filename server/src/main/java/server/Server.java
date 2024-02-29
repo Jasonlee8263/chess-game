@@ -21,6 +21,7 @@ private MemoryAuthDAO authDAO = new MemoryAuthDAO();
         LogOutHandler logOutHandler = new LogOutHandler(authDAO);
         CreateGameHandler createGameHandler = new CreateGameHandler(authDAO,gameDAO);
         ListGameHandler listGameHandler = new ListGameHandler(authDAO,gameDAO);
+        JoinGameHandler joinGameHandler = new JoinGameHandler(authDAO,gameDAO);
 
         Spark.post("/user",registerHandler::register);
         Spark.delete("/db",clearHandler::clear);
@@ -28,6 +29,7 @@ private MemoryAuthDAO authDAO = new MemoryAuthDAO();
         Spark.delete("/session",logOutHandler::logout);
         Spark.post("/game",createGameHandler::createGame);
         Spark.get("/game",listGameHandler::listGame);
+        Spark.put("/game",joinGameHandler::joinGame);
 
         Spark.awaitInitialization();
         return Spark.port();

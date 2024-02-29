@@ -1,11 +1,10 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.GameDAO;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
-import service.CreateGameRequest;
-import service.CreateGameResult;
+import requestAndResult.CreateGameRequest;
+import requestAndResult.CreateGameResult;
 import service.CreateGameService;
 import spark.Request;
 import spark.Response;

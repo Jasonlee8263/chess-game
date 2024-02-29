@@ -3,7 +3,7 @@ package service;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import model.GameData;
-import org.eclipse.jetty.server.Request;
+import requestAndResult.JoinGameRequest;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public class JoinGameService {
         this.gameDAO = gameDAO;
     }
 
-    public String joinGame(JoinGameRequest request,String authToken){
+    public String joinGame(JoinGameRequest request, String authToken){
         String username = "";
         if (authDAO.getAuth(authToken)!=null){
             username = authDAO.getAuth(authToken).username();

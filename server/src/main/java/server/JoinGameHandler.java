@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
+import requestAndResult.JoinGameRequest;
 import service.*;
 import spark.Request;
 import spark.Response;

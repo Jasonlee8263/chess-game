@@ -2,8 +2,8 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.*;
-import service.LogInRequest;
-import service.LogInResult;
+import requestAndResult.LogInRequest;
+import requestAndResult.LogInResult;
 import service.LogInService;
 import spark.Request;
 import spark.Response;

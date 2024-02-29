@@ -3,8 +3,8 @@ package service;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import model.GameData;
+import requestAndResult.ListGameResult;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class ListGameService {

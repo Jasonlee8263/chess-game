@@ -6,8 +6,8 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.LogInService;
-import service.RegisterRequest;
+import requestAndResult.RegisterRequest;
+import requestAndResult.RegisterResult;
 import service.RegisterService;
 
 public class RegisterTest {
@@ -20,9 +20,8 @@ public class RegisterTest {
     }
     @Test
     public void testRegister(){
-        int expected = 1;
-        registerService.register(new RegisterRequest("test1","1234","test1@gmail.com"));
-        Assertions.assertEquals(expected,memoryUserDAO.getUserData().size());
+        RegisterResult result = registerService.register(new RegisterRequest("test1","1234","test1@gmail.com"));
+        Assertions.assertEquals(result.username(),memoryUserDAO.getUser("test1").username());
         memoryUserDAO.createUser(new UserData("test_dup","1234","test@gmail.com"));
 //        Assertions.assertThrows()
     }

@@ -1,17 +1,14 @@
 package serviceTests;
 
-import chess.ChessGame;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
-import model.AuthData;
-import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import service.LogInRequest;
-import service.LogInResult;
+import requestAndResult.LogInRequest;
+import requestAndResult.LogInResult;
 import service.LogInService;
 
 public class LogInTest {

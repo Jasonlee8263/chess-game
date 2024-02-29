@@ -32,4 +32,7 @@ public class MemoryUserDAO implements UserDAO {
         userDataHashSet.clear();
     }
 
+    public Collection<UserData> getUserData() {
+        return userDataHashSet;
+    }
 }

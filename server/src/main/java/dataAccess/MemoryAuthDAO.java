@@ -40,4 +40,7 @@ public class MemoryAuthDAO implements AuthDAO {
         authDataHashSet.clear();
     }
 
+    public Collection<AuthData> getAuthData() {
+        return authDataHashSet;
+    }
 }

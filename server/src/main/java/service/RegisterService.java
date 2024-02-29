@@ -4,6 +4,8 @@ import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
+import requestAndResult.RegisterRequest;
+import requestAndResult.RegisterResult;
 
 import java.util.UUID;
 

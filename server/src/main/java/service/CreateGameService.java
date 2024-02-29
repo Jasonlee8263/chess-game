@@ -3,6 +3,8 @@ package service;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import model.GameData;
+import requestAndResult.CreateGameRequest;
+import requestAndResult.CreateGameResult;
 
 public class CreateGameService {
     private MemoryGameDAO gameDAO;

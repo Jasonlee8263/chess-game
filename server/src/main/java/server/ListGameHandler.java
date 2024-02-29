@@ -3,7 +3,7 @@ package server;
 import com.google.gson.Gson;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
-import service.ListGameResult;
+import requestAndResult.ListGameResult;
 import service.ListGameService;
 import spark.Request;
 import spark.Response;

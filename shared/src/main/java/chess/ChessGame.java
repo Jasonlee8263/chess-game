@@ -81,30 +81,44 @@ private ChessBoard curboard;
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessBoard newBoard = curboard.copy();
         ChessPiece startPiece = newBoard.getPiece(move.getStartPosition());
-        if (startPiece != null) {
-            if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 8) {
+
+        if (startPiece == null) {
+            throw new InvalidMoveException("Invalid Move: There is no piece at the start position.");
+        }
+
+        if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN) {
+            if ((startPiece.getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 8) ||
+                    (startPiece.getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 1)) {
+                // Handle pawn promotion
                 ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
                 newBoard.addPiece(move.getEndPosition(), newPiece);
-                newBoard.addPiece(move.getStartPosition(), null);
-            } else if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 1) {
-                ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
-                newBoard.addPiece(move.getEndPosition(), newPiece);
-                newBoard.addPiece(move.getStartPosition(), null);
-            } else if (validMoves(move.getStartPosition()).contains(move)) {
-                newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
                 newBoard.addPiece(move.getStartPosition(), null);
             } else {
-                throw new InvalidMoveException("Invalid Move");
+                // Handle regular move
+                if (!validMoves(move.getStartPosition()).contains(move)) {
+                    throw new InvalidMoveException("Invalid Move: This move is not valid.");
+                }
+                newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
+                newBoard.addPiece(move.getStartPosition(), null);
             }
-            TeamColor nextTurn = (curTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-            if (newBoard.getPiece(move.getEndPosition()) != null && newBoard.getPiece(move.getEndPosition()).getTeamColor() != curTurn) {
-                throw new InvalidMoveException("Invalid Move");
-            }
-            curboard = newBoard;
-            curTurn = nextTurn;
         } else {
-            throw new InvalidMoveException("Invalid Move");
+            // Handle moves for non-pawn pieces
+            if (!validMoves(move.getStartPosition()).contains(move)) {
+                throw new InvalidMoveException("Invalid Move: This move is not valid.");
+            }
+            newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
+            newBoard.addPiece(move.getStartPosition(), null);
         }
+
+        TeamColor nextTurn = (curTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+        ChessPiece endPiece = newBoard.getPiece(move.getEndPosition());
+
+        if (endPiece == null || endPiece.getTeamColor() != curTurn) {
+            throw new InvalidMoveException("Invalid Move: The piece at the end position does not belong to the current player.");
+        }
+
+        curboard = newBoard;
+        curTurn = nextTurn;
     }
 
     /**

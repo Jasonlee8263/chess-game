@@ -104,7 +104,7 @@ public class ChessPiece {
                     ChessPosition newPosition1 = new ChessPosition(myPosition.getRow()+1, myPosition.getColumn());
                     if(board.isValidPosition(newPosition1.getRow(), newPosition1.getColumn())){
                         if(board.getPiece(newPosition1)==null) {
-                            addPromotionWhite(myPosition, moves, newPosition1);
+                            addPromotion(myPosition, moves, newPosition1,8);
                         }
                     }
                     if(myPosition.getRow()==2){
@@ -121,7 +121,7 @@ public class ChessPiece {
                         if(board.isValidPosition(row,col)){
                             ChessPosition newPosition3 = new ChessPosition(row,col);
                             if(board.getPiece(newPosition3)!=null && board.getPiece(myPosition).getTeamColor()!=board.getPiece(newPosition3).getTeamColor()) {
-                                addPromotionWhite(myPosition, moves, newPosition3);
+                                addPromotion(myPosition, moves, newPosition3,8);
                             }
                         }
                     }
@@ -131,7 +131,7 @@ public class ChessPiece {
                     ChessPosition newPosition1 = new ChessPosition(myPosition.getRow()-1, myPosition.getColumn());
                     if(board.isValidPosition(newPosition1.getRow(), newPosition1.getColumn())){
                         if(board.getPiece(newPosition1)==null) {
-                            addPromotionBlack(myPosition, moves, newPosition1);
+                            addPromotion(myPosition, moves, newPosition1,1);
                         }
                     }
                     if(myPosition.getRow()==7){
@@ -148,7 +148,7 @@ public class ChessPiece {
                         if(board.isValidPosition(row,col)){
                             ChessPosition newPosition3 = new ChessPosition(row,col);
                             if(board.getPiece(newPosition3)!=null && board.getPiece(myPosition).getTeamColor()!=board.getPiece(newPosition3).getTeamColor()) {
-                                addPromotionBlack(myPosition, moves, newPosition3);
+                                addPromotion(myPosition, moves, newPosition3,1);
                             }
                         }
                     }
@@ -158,27 +158,38 @@ public class ChessPiece {
         return moves;
     }
 
-    private void addPromotionBlack(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
-        if(newPosition1.getRow() == 1) {
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
-        }
-        else{
-            moves.add(new ChessMove(myPosition,newPosition1,null));
-        }
-    }
-
-    private void addPromotionWhite(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
-        if(newPosition1.getRow() == 8) {
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
-            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
-        }
-        else{
-            moves.add(new ChessMove(myPosition,newPosition1,null));
+//    private void addPromotionBlack(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
+//        if(newPosition1.getRow() == 1) {
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
+//        }
+//        else{
+//            moves.add(new ChessMove(myPosition,newPosition1,null));
+//        }
+//    }
+//
+//    private void addPromotionWhite(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
+//        if(newPosition1.getRow() == 8) {
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
+//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
+//        }
+//        else{
+//            moves.add(new ChessMove(myPosition,newPosition1,null));
+//        }
+//    }
+    private void addPromotion(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition, int promotionRow) {
+        if (newPosition.getRow() == promotionRow) {
+            moves.add(new ChessMove(myPosition,newPosition, PieceType.ROOK));
+            moves.add(new ChessMove(myPosition,newPosition, PieceType.KNIGHT));
+            moves.add(new ChessMove(myPosition,newPosition, PieceType.BISHOP));
+            moves.add(new ChessMove(myPosition,newPosition, PieceType.QUEEN));
+            }
+        else {
+            moves.add(new ChessMove(myPosition, newPosition, null));
         }
     }
 

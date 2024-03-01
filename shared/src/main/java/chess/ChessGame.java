@@ -86,23 +86,18 @@ private ChessBoard curboard;
             throw new InvalidMoveException("Invalid Move: There is no piece at the start position.");
         }
 
-        if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN) {
-            if ((startPiece.getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 8) ||
-                    (startPiece.getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 1)) {
-                // Handle pawn promotion
-                ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
-                newBoard.addPiece(move.getEndPosition(), newPiece);
-                newBoard.addPiece(move.getStartPosition(), null);
-            } else {
-                // Handle regular move
-                if (!validMoves(move.getStartPosition()).contains(move)) {
-                    throw new InvalidMoveException("Invalid Move: This move is not valid.");
-                }
-                newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
-                newBoard.addPiece(move.getStartPosition(), null);
+        if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN &&
+                ((startPiece.getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 8) ||
+                        (startPiece.getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 1))) {
+            // Handle pawn promotion
+            if (move.getPromotionPiece() == null) {
+                throw new InvalidMoveException("Invalid Move: Promotion piece is not specified.");
             }
+            ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
+            newBoard.addPiece(move.getEndPosition(), newPiece);
+            newBoard.addPiece(move.getStartPosition(), null);
         } else {
-            // Handle moves for non-pawn pieces
+            // Handle regular move
             if (!validMoves(move.getStartPosition()).contains(move)) {
                 throw new InvalidMoveException("Invalid Move: This move is not valid.");
             }

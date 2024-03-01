@@ -21,9 +21,11 @@ public class CreateGameTest {
     public void testCreateGame(){
         createGameService.createGame(new CreateGameRequest("test"));
         Assertions.assertEquals(1,gameDAO.listGame().size());
+
+    }
+    @Test
+    public void testCreateGameFail(){
         CreateGameResult createGameResult = createGameService.createGame(new CreateGameRequest(null));
-        Assertions.assertEquals(1,gameDAO.listGame().size());
-
-
+        Assertions.assertEquals(0,gameDAO.listGame().size());
     }
 }

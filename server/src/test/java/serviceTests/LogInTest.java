@@ -28,6 +28,10 @@ public class LogInTest {
         LogInResult actual = logInService.login(new LogInRequest("test1","1234"));
         LogInResult expected  = new LogInResult("test1","1234","pass");
         Assertions.assertEquals(expected.username(),actual.username());
-//        Assertions.assertThrows()
+    }
+    @Test
+    public void testLogInFail(){
+        LogInResult result = logInService.login(new LogInRequest("newUser","1234"));
+        Assertions.assertEquals("Error: unauthorized",result.message());
     }
 }

@@ -158,29 +158,6 @@ public class ChessPiece {
         return moves;
     }
 
-//    private void addPromotionBlack(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
-//        if(newPosition1.getRow() == 1) {
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
-//        }
-//        else{
-//            moves.add(new ChessMove(myPosition,newPosition1,null));
-//        }
-//    }
-//
-//    private void addPromotionWhite(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition1) {
-//        if(newPosition1.getRow() == 8) {
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.ROOK));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.KNIGHT));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.BISHOP));
-//            moves.add(new ChessMove(myPosition,newPosition1, PieceType.QUEEN));
-//        }
-//        else{
-//            moves.add(new ChessMove(myPosition,newPosition1,null));
-//        }
-//    }
     private void addPromotion(ChessPosition myPosition, Collection<ChessMove> moves, ChessPosition newPosition, int promotionRow) {
         if (newPosition.getRow() == promotionRow) {
             moves.add(new ChessMove(myPosition,newPosition, PieceType.ROOK));

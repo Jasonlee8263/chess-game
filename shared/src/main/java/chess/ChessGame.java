@@ -79,35 +79,32 @@ private ChessBoard curboard;
      */
 
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        ChessBoard newBoard = new ChessBoard();
-        ChessBoard originalBoard = new ChessBoard();
-        newBoard = curboard.copy();
+        ChessBoard newBoard = curboard.copy();
         ChessPiece startPiece = newBoard.getPiece(move.getStartPosition());
-        ChessPiece originalPosPiece = newBoard.getPiece(move.getEndPosition());
-        if(startPiece!=null && startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor()==TeamColor.WHITE && move.getEndPosition().getRow()==8){
-            ChessPiece newPiece = new ChessPiece(newBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());
-            newBoard.addPiece(move.getEndPosition(),newPiece);
-            newBoard.addPiece(move.getStartPosition(),null);
-        }
-        else if(startPiece!=null && startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor()==TeamColor.BLACK && move.getEndPosition().getRow()==1){
-            ChessPiece newPiece = new ChessPiece(newBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());
-            newBoard.addPiece(move.getEndPosition(),newPiece);
-            newBoard.addPiece(move.getStartPosition(),null);
-        }
-        else if(validMoves(move.getStartPosition()).contains(move)){
-            newBoard.addPiece(move.getEndPosition(),newBoard.getPiece(move.getStartPosition()));
-            newBoard.addPiece(move.getStartPosition(),null);
-        }
-        else {
+        if (startPiece != null) {
+            if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor() == TeamColor.WHITE && move.getEndPosition().getRow() == 8) {
+                ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
+                newBoard.addPiece(move.getEndPosition(), newPiece);
+                newBoard.addPiece(move.getStartPosition(), null);
+            } else if (startPiece.getPieceType() == ChessPiece.PieceType.PAWN && startPiece.getTeamColor() == TeamColor.BLACK && move.getEndPosition().getRow() == 1) {
+                ChessPiece newPiece = new ChessPiece(startPiece.getTeamColor(), move.getPromotionPiece());
+                newBoard.addPiece(move.getEndPosition(), newPiece);
+                newBoard.addPiece(move.getStartPosition(), null);
+            } else if (validMoves(move.getStartPosition()).contains(move)) {
+                newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
+                newBoard.addPiece(move.getStartPosition(), null);
+            } else {
+                throw new InvalidMoveException("Invalid Move");
+            }
+            TeamColor nextTurn = (curTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+            if (newBoard.getPiece(move.getEndPosition()) != null && newBoard.getPiece(move.getEndPosition()).getTeamColor() != curTurn) {
+                throw new InvalidMoveException("Invalid Move");
+            }
+            curboard = newBoard;
+            curTurn = nextTurn;
+        } else {
             throw new InvalidMoveException("Invalid Move");
         }
-        TeamColor nextTurn = (curTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-        ChessPiece simulate = newBoard.getPiece(move.getEndPosition());
-        if(newBoard.getPiece(move.getEndPosition()).getTeamColor()!=curTurn){
-            throw new InvalidMoveException("Invalid Move");
-        }
-        curboard = newBoard;
-        curTurn = nextTurn;
     }
 
     /**

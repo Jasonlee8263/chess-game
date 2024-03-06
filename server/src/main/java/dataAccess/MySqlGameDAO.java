@@ -1,11 +1,14 @@
 package dataAccess;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MySqlGameDAO implements GameDAO{
@@ -14,6 +17,8 @@ public class MySqlGameDAO implements GameDAO{
     }
     public GameData createGame(String gameName) throws DataAccessException{
         GameData game = new GameData(null,null,null,null,null);
+        ChessGame chessGame = new ChessGame();
+        var json = new Gson().toJson(chessGame);
         var statement = "INSERT INTO game (gameID, whiteUsername, BlackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement)) {
@@ -21,7 +26,8 @@ public class MySqlGameDAO implements GameDAO{
                 ps.setString(2, game.whiteUsername());
                 ps.setString(3, game.blackUsername());
                 ps.setString(4, game.gameName());
-                ps.setString(5, game.game().toString());
+                ps.setString(5, json);
+                ps.executeUpdate();
             }
             return game;
         }
@@ -39,6 +45,7 @@ public class MySqlGameDAO implements GameDAO{
                 String BlackUsername = "";
                 String gameName = "";
                 String game = "";
+                ChessGame chessGame = null;
                 while(rs.next()){
                     //Display values
                     gameid = rs.getInt("gameID");
@@ -46,16 +53,24 @@ public class MySqlGameDAO implements GameDAO{
                     BlackUsername = rs.getString("BlackUsername");
                     gameName = rs.getString("gameName");
                     game = rs.getString("game");
+                    chessGame = new Gson().fromJson(game, ChessGame.class);
                 }
-                return new GameData(gameid, whiteUsername,BlackUsername,gameName,null);
+                return new GameData(gameid, whiteUsername,BlackUsername,gameName,chessGame);
             }
         }
         catch (SQLException e){
             throw new DataAccessException(e.getMessage());
         }
     }
-    public Collection<GameData> listGame() throws DataAccessException {
-        return null;
+    public Collection<GameData> listGame() throws DataAccessException, SQLException {
+        var results = new ArrayList<GameData>();
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT gameID, whiteUsername, BlackUsername, gameName, game FROM game";
+            try (var ps = conn.prepareStatement(statement)) {
+
+            }
+        }
+        return results;
     }
     public void updateGame(Integer gameID,String authToken,String color) throws DataAccessException{
 

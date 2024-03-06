@@ -47,7 +47,6 @@ public class MySqlUserDAO implements UserDAO{
                     System.out.println("Password: " + password);
                     System.out.println("Email: " + email);
                 }
-                ps.executeQuery();
                 return new UserData(userName, password,email);
             }
         }

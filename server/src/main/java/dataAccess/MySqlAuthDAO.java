@@ -16,6 +16,7 @@ public class MySqlAuthDAO implements AuthDAO{
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setString(1, auth.username());
                 ps.setString(2, auth.authToken());
+                ps.executeUpdate();
             }
             return new AuthData(auth.username(), auth.authToken());
         }
@@ -29,12 +30,12 @@ public class MySqlAuthDAO implements AuthDAO{
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
                 ResultSet rs = ps.executeQuery(statement);
-                String userName = rs.getString("username");
-                String authtoken = rs.getString("authToken");
+                String userName = null;
+                String authtoken = null;
                 while(rs.next()){
                     //Display values
-                    System.out.println("Username: " + userName);
-                    System.out.println("AuthToken: " + authtoken);
+                    userName = rs.getString("username");
+                    authtoken = rs.getString("authToken");
                 }
                 return new AuthData(userName, authtoken);
             }

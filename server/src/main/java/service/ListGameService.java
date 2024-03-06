@@ -6,6 +6,7 @@ import dataAccess.GameDAO;
 import model.GameData;
 import requestAndResult.ListGameResult;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class ListGameService {
@@ -15,7 +16,7 @@ public class ListGameService {
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
-    public ListGameResult listGame(String authToken) throws DataAccessException {
+    public ListGameResult listGame(String authToken) throws DataAccessException, SQLException {
         if (authDAO.getAuth(authToken) == null) {
             return new ListGameResult(null,"Error: unauthorized");
         }

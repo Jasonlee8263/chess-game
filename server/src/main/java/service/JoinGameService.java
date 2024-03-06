@@ -1,21 +1,22 @@
 package service;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
+import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
 import model.GameData;
 import requestAndResult.JoinGameRequest;
 
 import java.util.Objects;
 
 public class JoinGameService {
-    private MemoryGameDAO gameDAO;
-    private MemoryAuthDAO authDAO;
-    public JoinGameService(MemoryAuthDAO authDAO,MemoryGameDAO gameDAO){
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
+    public JoinGameService(AuthDAO authDAO,GameDAO gameDAO){
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
 
-    public String joinGame(JoinGameRequest request, String authToken){
+    public String joinGame(JoinGameRequest request, String authToken) throws DataAccessException {
         String username = "";
         if (authDAO.getAuth(authToken)!=null){
             username = authDAO.getAuth(authToken).username();

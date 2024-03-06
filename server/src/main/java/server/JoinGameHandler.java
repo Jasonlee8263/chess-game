@@ -1,8 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
+import dataAccess.DataAccessException;
+import dataAccess.AuthDAO;
+import dataAccess.GameDAO;
 import requestAndResult.JoinGameRequest;
 import service.*;
 import spark.Request;
@@ -11,13 +12,13 @@ import spark.Response;
 import java.util.Map;
 
 public class JoinGameHandler {
-    private MemoryAuthDAO authDAO;
-    private MemoryGameDAO gameDAO;
-    public JoinGameHandler(MemoryAuthDAO authDAO, MemoryGameDAO gameDAO){
+    private AuthDAO authDAO;
+    private GameDAO gameDAO;
+    public JoinGameHandler(AuthDAO authDAO, GameDAO gameDAO){
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
-    public Object joinGame(Request req, Response res){
+    public Object joinGame(Request req, Response res) throws DataAccessException {
         String authToken =  req.headers("Authorization");
         Gson gson = new Gson();
         JoinGameRequest request = gson.fromJson(req.body(),JoinGameRequest.class);

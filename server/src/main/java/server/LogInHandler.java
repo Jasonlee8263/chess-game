@@ -8,14 +8,16 @@ import service.LogInService;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
+
 public class LogInHandler {
-    private MemoryAuthDAO authDAO;
-    private MemoryUserDAO userDAO;
-    public LogInHandler(MemoryAuthDAO authDAO,MemoryUserDAO userDAO){
+    private AuthDAO authDAO;
+    private UserDAO userDAO;
+    public LogInHandler(AuthDAO authDAO,UserDAO userDAO){
         this.authDAO = authDAO;
         this.userDAO = userDAO;
     }
-    public Object login(Request req, Response res){
+    public Object login(Request req, Response res) throws SQLException, DataAccessException {
         Gson gson = new Gson();
         LogInRequest request = gson.fromJson(req.body(), LogInRequest.class);
         LogInService logInService = new LogInService(authDAO, userDAO);

@@ -2,7 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import dataAccess.MemoryAuthDAO;
+import dataAccess.AuthDAO;
 import service.LogOutService;
 import spark.Request;
 import spark.Response;
@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class LogOutHandler {
-    private MemoryAuthDAO authDAO;
-    public LogOutHandler(MemoryAuthDAO authDAO){
+    private AuthDAO authDAO;
+    public LogOutHandler(AuthDAO authDAO){
         this.authDAO = authDAO;
     }
     public Object logout(Request req, Response res) throws DataAccessException {

@@ -22,6 +22,7 @@ public class MySqlUserDAO implements UserDAO{
                     ps.setString(1, user.username());
                     ps.setString(2, user.password());
                     ps.setString(3, user.email());
+                    ps.executeUpdate();
                 }
             return new UserData(user.username(), user.password(), user.email());
         }
@@ -34,15 +35,19 @@ public class MySqlUserDAO implements UserDAO{
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
                 ResultSet rs = ps.executeQuery(statement);
-                String userName = rs.getString("username");
-                String password = rs.getString("password");
-                String email = rs.getString("email");
+                String userName = "";
+                String password = "";
+                String email = "";
                 while(rs.next()){
                     //Display values
+                    userName = rs.getString("username");
+                    password = rs.getString("password");
+                    email = rs.getString("email");
                     System.out.println("Username: " + userName);
                     System.out.println("Password: " + password);
                     System.out.println("Email: " + email);
                 }
+                ps.executeQuery();
                 return new UserData(userName, password,email);
             }
         }

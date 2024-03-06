@@ -1,5 +1,6 @@
 package serviceTests;
 
+import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import model.AuthData;
@@ -22,14 +23,14 @@ public class ListGameTest {
         listGameService = new ListGameService(authDAO,gameDAO);
     }
     @Test
-    public void testListGame(){
+    public void testListGame() throws DataAccessException {
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));
         GameData game = gameDAO.createGame("test");
         ListGameResult result = listGameService.listGame(auth.authToken());
         Assertions.assertNull(result.message());
     }
     @Test
-    public void testListGameFail(){
+    public void testListGameFail() throws DataAccessException {
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));
         GameData game = gameDAO.createGame("test");
         ListGameResult result = listGameService.listGame(null);

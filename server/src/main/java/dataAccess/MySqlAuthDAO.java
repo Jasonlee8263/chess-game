@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MySqlAuthDAO implements AuthDAO{
+    public MySqlAuthDAO() throws DataAccessException{
+        configureDatabase();
+    }
     public AuthData createAuth(AuthData auth) throws DataAccessException{
         var statement = "INSERT INTO auth (username, authToken) VALUES (?, ?)";
         try (var conn = DatabaseManager.getConnection()) {

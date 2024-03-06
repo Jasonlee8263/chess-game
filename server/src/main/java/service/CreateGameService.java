@@ -1,19 +1,20 @@
 package service;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
+import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
 import model.GameData;
 import requestAndResult.CreateGameRequest;
 import requestAndResult.CreateGameResult;
 
 public class CreateGameService {
-    private MemoryGameDAO gameDAO;
-    private MemoryAuthDAO authDAO;
-    public CreateGameService(MemoryAuthDAO authDAO,MemoryGameDAO gameDAO){
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
+    public CreateGameService(AuthDAO authDAO,GameDAO gameDAO){
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
-    public CreateGameResult createGame(CreateGameRequest request){
+    public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
         GameData gameData = new GameData(null,null,null, request.gameName(), null);
         if(gameData.gameName()==null){
             return new CreateGameResult(null,"Error: bad request");

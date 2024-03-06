@@ -1,5 +1,6 @@
 package serviceTests;
 
+import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
@@ -22,7 +23,7 @@ public class JoinGameTest {
         joinGameService = new JoinGameService(authDAO,gameDAO);
     }
     @Test
-    public void testJoinGame(){
+    public void testJoinGame() throws DataAccessException {
         UserData user = userDAO.createUser(new UserData("testUser","1234","test@gmail.com"));
         GameData game = gameDAO.createGame("test");
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));
@@ -31,7 +32,7 @@ public class JoinGameTest {
         Assertions.assertEquals(new GameData(game.gameID(), "testUser", null, "test", null),gameDAO.getGame(game.gameID()));
     }
     @Test
-    public void testJoinGameFail(){
+    public void testJoinGameFail() throws DataAccessException {
         UserData user = userDAO.createUser(new UserData("testUser","1234","test@gmail.com"));
         GameData game = gameDAO.createGame("test");
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));

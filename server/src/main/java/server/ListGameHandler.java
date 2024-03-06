@@ -1,21 +1,22 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
+import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
+import dataAccess.GameDAO;
 import requestAndResult.ListGameResult;
 import service.ListGameService;
 import spark.Request;
 import spark.Response;
 
 public class ListGameHandler {
-    private MemoryAuthDAO authDAO;
-    private MemoryGameDAO gameDAO;
-    public ListGameHandler(MemoryAuthDAO authDAO,MemoryGameDAO gameDAO){
+    private AuthDAO authDAO;
+    private GameDAO gameDAO;
+    public ListGameHandler(AuthDAO authDAO,GameDAO gameDAO){
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
-    public Object listGame(Request req, Response res) {
+    public Object listGame(Request req, Response res) throws DataAccessException {
         String authToken = req.headers("Authorization");
         Gson gson = new Gson();
         ListGameService listGameService = new ListGameService(authDAO, gameDAO);

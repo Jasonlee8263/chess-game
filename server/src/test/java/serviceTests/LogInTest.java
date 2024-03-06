@@ -11,6 +11,8 @@ import requestAndResult.LogInRequest;
 import requestAndResult.LogInResult;
 import service.LogInService;
 
+import java.sql.SQLException;
+
 public class LogInTest {
     private static LogInService logInService;
     static MemoryUserDAO memoryUserDAO = new MemoryUserDAO();
@@ -24,13 +26,13 @@ public class LogInTest {
 
     }
     @Test
-    public void testLogIn() throws DataAccessException{
+    public void testLogIn() throws DataAccessException, SQLException {
         LogInResult actual = logInService.login(new LogInRequest("test1","1234"));
         LogInResult expected  = new LogInResult("test1","1234","pass");
         Assertions.assertEquals(expected.username(),actual.username());
     }
     @Test
-    public void testLogInFail(){
+    public void testLogInFail() throws SQLException, DataAccessException {
         LogInResult result = logInService.login(new LogInRequest("newUser","1234"));
         Assertions.assertEquals("Error: unauthorized",result.message());
     }

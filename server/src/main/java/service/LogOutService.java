@@ -6,8 +6,8 @@ import dataAccess.MemoryAuthDAO;
 import model.AuthData;
 
 public class LogOutService {
-    private MemoryAuthDAO authDAO;
-    public LogOutService(MemoryAuthDAO authDAO){
+    private AuthDAO authDAO;
+    public LogOutService(AuthDAO authDAO){
         this.authDAO = authDAO;
     }
     public String delete(String authToken) throws DataAccessException {

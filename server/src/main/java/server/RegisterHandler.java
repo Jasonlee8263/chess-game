@@ -1,22 +1,25 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.DataAccessException;
+import dataAccess.AuthDAO;
+import dataAccess.UserDAO;
 import requestAndResult.RegisterRequest;
 import requestAndResult.RegisterResult;
 import service.RegisterService;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
+
 public class RegisterHandler {
-    private MemoryAuthDAO authDAO;
-    private MemoryUserDAO userDAO;
-    public RegisterHandler(MemoryAuthDAO authDAO,MemoryUserDAO userDAO){
+    private AuthDAO authDAO;
+    private UserDAO userDAO;
+    public RegisterHandler(AuthDAO authDAO,UserDAO userDAO){
         this.userDAO = userDAO;
         this.authDAO = authDAO;
     }
-    public Object register(Request req, Response res){
+    public Object register(Request req, Response res) throws SQLException, DataAccessException {
         Gson gson = new Gson();
         RegisterRequest request = gson.fromJson(req.body(),RegisterRequest.class);
         RegisterService registerService = new RegisterService(authDAO,userDAO);

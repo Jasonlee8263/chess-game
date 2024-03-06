@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class RegisterService {
-    private MySqlAuthDAO authDAO;
-    private MySqlUserDAO userDAO;
-    public RegisterService(MySqlAuthDAO authDAO,MySqlUserDAO userDAO){
+    private AuthDAO authDAO;
+    private UserDAO userDAO;
+    public RegisterService(AuthDAO authDAO,UserDAO userDAO){
         this.userDAO = userDAO;
         this.authDAO = authDAO;
     }

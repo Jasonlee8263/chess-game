@@ -1,22 +1,22 @@
 package service;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import model.AuthData;
 import model.UserData;
 import requestAndResult.RegisterRequest;
 import requestAndResult.RegisterResult;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class RegisterService {
-    private MemoryAuthDAO authDAO;
-    private MemoryUserDAO userDAO;
-    public RegisterService(MemoryAuthDAO authDAO,MemoryUserDAO userDAO){
+    private MySqlAuthDAO authDAO;
+    private MySqlUserDAO userDAO;
+    public RegisterService(MySqlAuthDAO authDAO,MySqlUserDAO userDAO){
         this.userDAO = userDAO;
         this.authDAO = authDAO;
     }
-    public RegisterResult register(RegisterRequest request){
+    public RegisterResult register(RegisterRequest request) throws SQLException, DataAccessException {
         UserData user = new UserData(request.username(), request.password(), request.email());
         if(user.username()==null || user.password()==null || user.email()==null){
             return new RegisterResult(null, null,"Error: bad request");

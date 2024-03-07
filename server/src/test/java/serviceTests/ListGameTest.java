@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import requestAndResult.ListGameResult;
 import service.ListGameService;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class ListGameTest {
@@ -23,14 +24,14 @@ public class ListGameTest {
         listGameService = new ListGameService(authDAO,gameDAO);
     }
     @Test
-    public void testListGame() throws DataAccessException {
+    public void testListGame() throws DataAccessException, SQLException {
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));
         GameData game = gameDAO.createGame("test");
         ListGameResult result = listGameService.listGame(auth.authToken());
         Assertions.assertNull(result.message());
     }
     @Test
-    public void testListGameFail() throws DataAccessException {
+    public void testListGameFail() throws DataAccessException, SQLException {
         AuthData auth = authDAO.createAuth(new AuthData("testUser","test1"));
         GameData game = gameDAO.createGame("test");
         ListGameResult result = listGameService.listGame(null);

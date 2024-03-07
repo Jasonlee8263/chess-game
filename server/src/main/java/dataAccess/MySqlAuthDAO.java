@@ -26,10 +26,10 @@ public class MySqlAuthDAO implements AuthDAO{
     }
 
     public AuthData getAuth(String authToken) throws DataAccessException {
-        var statement = "SELECT authToken FROM auth WHERE authToken=?";
+        var statement = "SELECT username, authToken FROM auth WHERE authToken=?";
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
-                ResultSet rs = ps.executeQuery(statement);
+                ResultSet rs = ps.executeQuery();
                 String userName = null;
                 String authtoken = null;
                 while(rs.next()){
@@ -45,7 +45,16 @@ public class MySqlAuthDAO implements AuthDAO{
         }
     }
 
-    public void deleteAuth(String authToken){
+    public void deleteAuth(String authToken) throws DataAccessException, SQLException {
+        var statement = "DELETE FROM auth WHERE authToken=?";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.executeUpdate(statement);
+        }
+        catch (SQLException e){
+            throw new DataAccessException(e.getMessage());
+        }
+    }
 
     }
     public void clear() throws DataAccessException {
@@ -63,8 +72,8 @@ public class MySqlAuthDAO implements AuthDAO{
             """
             CREATE TABLE IF NOT EXISTS  auth (
               `username` varchar(256) NOT NULL,
-              `authToken` varchar(256) NOT NULL',
-              PRIMARY KEY (`authToken`),
+              `authToken` varchar(256) NOT NULL,
+              PRIMARY KEY (`authToken`)
             )
             """
     };

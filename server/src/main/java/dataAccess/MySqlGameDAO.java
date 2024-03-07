@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
 public class MySqlGameDAO implements GameDAO{
     public MySqlGameDAO() throws DataAccessException{
         configureDatabase();
@@ -19,15 +21,22 @@ public class MySqlGameDAO implements GameDAO{
         GameData game = new GameData(null,null,null,null,null);
         ChessGame chessGame = new ChessGame();
         var json = new Gson().toJson(chessGame);
-        var statement = "INSERT INTO game (gameID, whiteUsername, BlackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
+        var statement = "INSERT INTO game (whiteUsername, BlackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()) {
-            try (var ps = conn.prepareStatement(statement)) {
-                ps.setInt(1, game.gameID());
-                ps.setString(2, game.whiteUsername());
-                ps.setString(3, game.blackUsername());
-                ps.setString(4, game.gameName());
-                ps.setString(5, json);
+            try (var ps = conn.prepareStatement(statement,RETURN_GENERATED_KEYS)) {
+                ps.setString(1, game.whiteUsername());
+                ps.setString(2, game.blackUsername());
+                ps.setString(3, gameName);
+                ps.setString(4, json);
                 ps.executeUpdate();
+                var rs = ps.getGeneratedKeys();
+                var ID = 0;
+                if (rs.next()) {
+                    ID = rs.getInt(1);
+                    game.gameID() = ID;
+                }
+
+
             }
             return game;
         }
@@ -36,13 +45,13 @@ public class MySqlGameDAO implements GameDAO{
         }
     }
     public GameData getGame(Integer gameID) throws DataAccessException {
-        var statement = "SELECT gameID FROM game WHERE gameID=?";
+        var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game WHERE gameID=?";
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
-                ResultSet rs = ps.executeQuery(statement);
+                ResultSet rs = ps.executeQuery();
                 Integer gameid = null;
                 String whiteUsername = "";
-                String BlackUsername = "";
+                String blackUsername = "";
                 String gameName = "";
                 String game = "";
                 ChessGame chessGame = null;
@@ -50,12 +59,12 @@ public class MySqlGameDAO implements GameDAO{
                     //Display values
                     gameid = rs.getInt("gameID");
                     whiteUsername = rs.getString("whiteUsername");
-                    BlackUsername = rs.getString("BlackUsername");
+                    blackUsername = rs.getString("blackUsername");
                     gameName = rs.getString("gameName");
                     game = rs.getString("game");
                     chessGame = new Gson().fromJson(game, ChessGame.class);
                 }
-                return new GameData(gameid, whiteUsername,BlackUsername,gameName,chessGame);
+                return new GameData(gameid, whiteUsername,blackUsername,gameName,chessGame);
             }
         }
         catch (SQLException e){
@@ -67,7 +76,7 @@ public class MySqlGameDAO implements GameDAO{
         try (var conn = DatabaseManager.getConnection()) {
             var statement = "SELECT gameID, whiteUsername, BlackUsername, gameName, game FROM game";
             try (var ps = conn.prepareStatement(statement)) {
-
+                var rs = ps.executeQuery();
             }
         }
         return results;
@@ -88,13 +97,13 @@ public class MySqlGameDAO implements GameDAO{
     }
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  auth (
-              `gameID` int NOT NULL,
-              `whiteUsername` varchar(256)',
-              `blackUsername` varchar(256)',
-              `gameName` varchar(256) NOT NULL',
+            CREATE TABLE IF NOT EXISTS  game (
+              `gameID` int NOT NULL AUTO_INCREMENT,
+              `whiteUsername` varchar(256),
+              `blackUsername` varchar(256),
+              `gameName` varchar(256) NOT NULL,
               `game` TEXT DEFAULT NULL,
-              PRIMARY KEY (`gameID`),
+              PRIMARY KEY (`gameID`)
             )
             """
     };

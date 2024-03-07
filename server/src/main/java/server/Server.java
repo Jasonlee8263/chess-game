@@ -1,18 +1,30 @@
 package server;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import spark.*;
 
 public class Server {
-private MemoryUserDAO userDAO = new MemoryUserDAO();
-private MemoryGameDAO gameDAO = new MemoryGameDAO();
-private MemoryAuthDAO authDAO = new MemoryAuthDAO();
+
+
+
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+        UserDAO userDAO = null;
+        GameDAO gameDAO = null;
+        AuthDAO authDAO = null;
+        try {
+            userDAO = new MySqlUserDAO();
+            gameDAO = new MySqlGameDAO();
+            authDAO = new MySqlAuthDAO();
+        }
+        catch (DataAccessException e){
+            System.out.println("Error");
+            stop();
+            System.exit(1);
+        }
+
 
         // Register your endpoints and handle exceptions here.
         ClearHandler clearHandler = new ClearHandler(authDAO,gameDAO,userDAO);

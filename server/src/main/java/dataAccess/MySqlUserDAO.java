@@ -31,21 +31,23 @@ public class MySqlUserDAO implements UserDAO{
         }
     }
     public UserData getUser(String username) throws DataAccessException,SQLException{
-        var statement = "SELECT username FROM user WHERE username=?";
+        var statement = "SELECT username, password, email FROM user WHERE username=?";
         try(var conn = DatabaseManager.getConnection()){
+            String userName = "";
+            String password = "";
+            String email = "";
             try (var ps = conn.prepareStatement(statement)){
-                ResultSet rs = ps.executeQuery(statement);
-                String userName = "";
-                String password = "";
-                String email = "";
-                while(rs.next()){
-                    //Display values
-                    userName = rs.getString("username");
-                    password = rs.getString("password");
-                    email = rs.getString("email");
-                    System.out.println("Username: " + userName);
-                    System.out.println("Password: " + password);
-                    System.out.println("Email: " + email);
+                ps.setString(1,username);
+                try(var rs = ps.executeQuery()){
+                    while(rs.next()){
+                        //Display values
+                        userName = rs.getString("username");
+                        password = rs.getString("password");
+                        email = rs.getString("email");
+                        System.out.println("Username: " + userName);
+                        System.out.println("Password: " + password);
+                        System.out.println("Email: " + email);
+                    }
                 }
                 return new UserData(userName, password,email);
             }
@@ -92,9 +94,9 @@ public class MySqlUserDAO implements UserDAO{
             """
             CREATE TABLE IF NOT EXISTS  user (
               `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL',
+              `password` varchar(256) NOT NULL,
               `email` varchar(256) NOT NULL,
-              PRIMARY KEY (`username`),
+              PRIMARY KEY (`username`)
             )
             """
     };

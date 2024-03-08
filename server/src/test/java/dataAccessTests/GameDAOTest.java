@@ -1,4 +1,4 @@
-package DAOTests;
+package dataAccessTests;
 
 public class GameDAOTest {
 }

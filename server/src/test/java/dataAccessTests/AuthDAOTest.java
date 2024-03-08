@@ -1,8 +1,7 @@
-package DAOTests;
+package dataAccessTests;
 
 import dataAccess.*;
 import model.AuthData;
-import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +28,11 @@ public class AuthDAOTest {
         Assertions.assertEquals(expected,existingUser,"error");
     }
     @Test
-    public void testCreateAuthFail(){
-        AuthData expected = new AuthData("existingUser","testAuth");
-
+    public void testCreateAuthFail() throws DataAccessException,SQLException{
+        authDAO.createAuth(new AuthData("existingUser","testAuth"));
+        var thrown = Assertions.assertThrows(DataAccessException.class,()->{
+            authDAO.createAuth(new AuthData("existingUser","testAuth"));
+        });
     }
     @Test
     public void testGetAuth(){

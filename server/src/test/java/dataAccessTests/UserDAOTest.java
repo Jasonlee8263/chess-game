@@ -13,6 +13,7 @@ public class UserDAOTest {
     public static void createUserDAO() throws DataAccessException {
         userDAO = new MySqlUserDAO();
     }
+    //tests
     @BeforeEach
     public void clear() throws DataAccessException {
         userDAO.clear();

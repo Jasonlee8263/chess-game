@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import service.LogOutService;
 
+import java.sql.SQLException;
+
 public class LogOutTest {
     private static LogOutService logOutService;
     static MemoryUserDAO memoryUserDAO = new MemoryUserDAO();
@@ -24,7 +26,7 @@ public class LogOutTest {
     }
 
     @Test
-    public void testLogOut() throws DataAccessException {
+    public void testLogOut() throws DataAccessException, SQLException {
         memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
         AuthData auth = memoryAuthDAO.createAuth(new AuthData("test1","test1"));
         Assertions.assertEquals(auth,memoryAuthDAO.getAuth(auth.authToken()));
@@ -32,7 +34,7 @@ public class LogOutTest {
         Assertions.assertNull(memoryAuthDAO.getAuth(auth.authToken()));
     }
     @Test
-    public void testLogOutFail() throws DataAccessException{
+    public void testLogOutFail() throws DataAccessException, SQLException {
         memoryUserDAO.createUser(new UserData("test1","1234","test@gmail.com"));
         AuthData auth = memoryAuthDAO.createAuth(new AuthData("test1","test1"));
         Assertions.assertEquals("Error: unauthorized",logOutService.delete("Diff"));

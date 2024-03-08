@@ -11,11 +11,11 @@ public class MySqlAuthDAO implements AuthDAO{
         configureDatabase();
     }
     public AuthData createAuth(AuthData auth) throws DataAccessException{
-        var statement = "INSERT INTO auth (username, authToken) VALUES (?, ?)";
+        var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement)) {
-                ps.setString(1, auth.username());
-                ps.setString(2, auth.authToken());
+                ps.setString(1, auth.authToken());
+                ps.setString(2, auth.username());
                 ps.executeUpdate();
             }
             return new AuthData(auth.username(), auth.authToken());
@@ -29,6 +29,7 @@ public class MySqlAuthDAO implements AuthDAO{
         var statement = "SELECT username, authToken FROM auth WHERE authToken=?";
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
+                ps.setString(1,authToken);
                 ResultSet rs = ps.executeQuery();
                 String userName = null;
                 String authtoken = null;
@@ -49,13 +50,13 @@ public class MySqlAuthDAO implements AuthDAO{
         var statement = "DELETE FROM auth WHERE authToken=?";
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement)) {
-                ps.executeUpdate(statement);
-        }
+                ps.setString(1,authToken);
+                ps.executeUpdate();
+            }
         catch (SQLException e){
             throw new DataAccessException(e.getMessage());
+            }
         }
-    }
-
     }
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE auth";
@@ -71,8 +72,8 @@ public class MySqlAuthDAO implements AuthDAO{
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  auth (
-              `username` varchar(256) NOT NULL,
               `authToken` varchar(256) NOT NULL,
+              `username` varchar(256) NOT NULL,
               PRIMARY KEY (`authToken`)
             )
             """

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import model.AuthData;
 import requestAndResult.ListGameResult;
 import service.ListGameService;
 import spark.Request;
@@ -23,7 +24,7 @@ public class ListGameHandler {
         Gson gson = new Gson();
         ListGameService listGameService = new ListGameService(authDAO, gameDAO);
         ListGameResult result = listGameService.listGame(authToken);
-        if(authDAO.getAuth(authToken)==null){
+        if(authDAO.getAuth(authToken).equals(new AuthData(null,null))){
             res.status(401);
         }
         return gson.toJson(result);

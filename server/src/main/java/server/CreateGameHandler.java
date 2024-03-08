@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import model.AuthData;
 import requestAndResult.CreateGameRequest;
 import requestAndResult.CreateGameResult;
 import service.CreateGameService;
@@ -25,7 +26,7 @@ public class CreateGameHandler {
         CreateGameRequest request = gson.fromJson(req.body(),CreateGameRequest.class);
         CreateGameService createGameService = new CreateGameService(authDAO,gameDAO);
         CreateGameResult result = createGameService.createGame(request);
-        if(authDAO.getAuth(authToken)==null){
+        if(authDAO.getAuth(authToken).equals(new AuthData(null,null))){
             res.status(401);
             return new Gson().toJson(Map.of("message","Error: unauthorized"));
         }

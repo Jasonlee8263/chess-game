@@ -3,6 +3,7 @@ package service;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
+import model.AuthData;
 import model.GameData;
 import requestAndResult.ListGameResult;
 
@@ -17,7 +18,8 @@ public class ListGameService {
         this.gameDAO = gameDAO;
     }
     public ListGameResult listGame(String authToken) throws DataAccessException, SQLException {
-        if (authDAO.getAuth(authToken) == null) {
+        AuthData emptyAuth = new AuthData(null,null);
+        if (authDAO.getAuth(authToken).equals(emptyAuth)) {
             return new ListGameResult(null,"Error: unauthorized");
         }
         Collection<GameData> gameList = gameDAO.listGame();

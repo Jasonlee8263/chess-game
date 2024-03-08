@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import dataAccess.DataAccessException;
 import dataAccess.AuthDAO;
 import dataAccess.GameDAO;
+import model.AuthData;
 import requestAndResult.JoinGameRequest;
 import service.*;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class JoinGameHandler {
@@ -18,13 +20,14 @@ public class JoinGameHandler {
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
     }
-    public Object joinGame(Request req, Response res) throws DataAccessException {
+    public Object joinGame(Request req, Response res) throws DataAccessException, SQLException {
         String authToken =  req.headers("Authorization");
         Gson gson = new Gson();
         JoinGameRequest request = gson.fromJson(req.body(),JoinGameRequest.class);
         JoinGameService joinGameService = new JoinGameService(authDAO,gameDAO);
         String result = joinGameService.joinGame(request,authToken);
-        if(authDAO.getAuth(authToken)==null){
+        AuthData emptyAuth = new AuthData(null,null);
+        if(authDAO.getAuth(authToken).equals(emptyAuth)){
             res.status(401);
             return new Gson().toJson(Map.of("message","Error: unauthorized"));
         }

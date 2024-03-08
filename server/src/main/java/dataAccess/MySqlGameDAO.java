@@ -18,10 +18,10 @@ public class MySqlGameDAO implements GameDAO{
         configureDatabase();
     }
     public GameData createGame(String gameName) throws DataAccessException{
-        GameData game = new GameData(null,null,null,null,null);
+        GameData game = new GameData(null,null,null,gameName,null);
         ChessGame chessGame = new ChessGame();
         var json = new Gson().toJson(chessGame);
-        var statement = "INSERT INTO game (whiteUsername, BlackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
+        var statement = "INSERT INTO game (whiteUsername, BlackUsername, gameName, game) VALUES (?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()) {
             try (var ps = conn.prepareStatement(statement,RETURN_GENERATED_KEYS)) {
                 ps.setString(1, game.whiteUsername());
@@ -33,7 +33,7 @@ public class MySqlGameDAO implements GameDAO{
                 var ID = 0;
                 if (rs.next()) {
                     ID = rs.getInt(1);
-                    game.gameID() = ID;
+                    game = new GameData(ID,game.whiteUsername(),game.blackUsername(),game.gameName(),game.game());
                 }
 
 
@@ -48,6 +48,7 @@ public class MySqlGameDAO implements GameDAO{
         var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game WHERE gameID=?";
         try(var conn = DatabaseManager.getConnection()){
             try (var ps = conn.prepareStatement(statement)){
+                ps.setInt(1,gameID);
                 ResultSet rs = ps.executeQuery();
                 Integer gameid = null;
                 String whiteUsername = "";
@@ -77,12 +78,48 @@ public class MySqlGameDAO implements GameDAO{
             var statement = "SELECT gameID, whiteUsername, BlackUsername, gameName, game FROM game";
             try (var ps = conn.prepareStatement(statement)) {
                 var rs = ps.executeQuery();
+                Integer gameid = null;
+                String whiteUsername = "";
+                String blackUsername = "";
+                String gameName = "";
+                String game = "";
+                ChessGame chessGame = null;
+                while(rs.next()){
+                    //Display values
+                    gameid = rs.getInt("gameID");
+                    whiteUsername = rs.getString("whiteUsername");
+                    blackUsername = rs.getString("blackUsername");
+                    gameName = rs.getString("gameName");
+                    game = rs.getString("game");
+                    chessGame = new Gson().fromJson(game, ChessGame.class);
+                    results.add(new GameData(gameid,whiteUsername,blackUsername,gameName,chessGame));
+                }
             }
         }
         return results;
     }
-    public void updateGame(Integer gameID,String authToken,String color) throws DataAccessException{
+    public void updateGame(Integer gameID,String userName,String color) throws DataAccessException, SQLException {
+        GameData game = getGame(gameID);
+        if (game != null) {
+            if ("WHITE".equals(color)) {
+                game = new GameData(gameID, userName, game.blackUsername(), game.gameName(), game.game());
+            } else if ("BLACK".equals(color)) {
+                game = new GameData(gameID, game.whiteUsername(), userName, game.gameName(), game.game());
+            }
+        var json = new Gson().toJson(game.game());
 
+        var statement = "UPDATE game SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, game.whiteUsername());
+                ps.setString(2, game.blackUsername());
+                ps.setString(3,game.gameName());
+                ps.setString(4,json);
+                ps.setInt(5,game.gameID());
+                ps.executeUpdate();
+                }
+            }
+        }
     }
     public void clear() throws DataAccessException {
         var statement = "TRUNCATE game";
@@ -97,7 +134,7 @@ public class MySqlGameDAO implements GameDAO{
     }
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  game (
+            CREATE TABLE IF NOT EXISTS game (
               `gameID` int NOT NULL AUTO_INCREMENT,
               `whiteUsername` varchar(256),
               `blackUsername` varchar(256),

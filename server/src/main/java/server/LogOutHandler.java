@@ -7,6 +7,7 @@ import service.LogOutService;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ public class LogOutHandler {
     public LogOutHandler(AuthDAO authDAO){
         this.authDAO = authDAO;
     }
-    public Object logout(Request req, Response res) throws DataAccessException {
+    public Object logout(Request req, Response res) throws DataAccessException, SQLException {
             String authToken = req.headers("Authorization");
             LogOutService logOutService = new LogOutService(authDAO);
             String result = logOutService.delete(authToken);

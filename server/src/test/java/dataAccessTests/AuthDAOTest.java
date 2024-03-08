@@ -35,23 +35,35 @@ public class AuthDAOTest {
         });
     }
     @Test
-    public void testGetAuth(){
-
+    public void testGetAuth() throws DataAccessException {
+        var existingAuth = authDAO.createAuth(new AuthData("existingUser","testAuth"));
+        var auth = authDAO.getAuth(existingAuth.authToken());
+        Assertions.assertEquals("testAuth",auth.authToken());
     }
     @Test
-    public void testGetAuthFail(){
-
+    public void testGetAuthFail() throws DataAccessException {
+        var auth = authDAO.getAuth("testAuth");
+        Assertions.assertEquals(new AuthData(null,null),auth);
     }
     @Test
-    public void testDeleteAuth(){
-
+    public void testDeleteAuth() throws DataAccessException, SQLException {
+        var auth = authDAO.createAuth(new AuthData("existingUser","testAuth"));
+        authDAO.deleteAuth(auth.authToken());
+        var testAuth = authDAO.getAuth("testAuth");
+        Assertions.assertEquals(new AuthData(null,null),testAuth);
     }
     @Test
     public void testDeleteAuthFail(){
-
+        Assertions.assertDoesNotThrow(() -> {
+            authDAO.deleteAuth("testAuth");
+        });
     }
     @Test
-    public void testClear(){
-
+    public void testClear() throws DataAccessException {
+        authDAO.createAuth(new AuthData("user1", "auth1"));
+        authDAO.createAuth(new AuthData("user2", "auth2"));
+        authDAO.clear();
+        Assertions.assertEquals(new AuthData(null, null), authDAO.getAuth("auth1"));
+        Assertions.assertEquals(new AuthData(null, null), authDAO.getAuth("auth2"));
     }
 }

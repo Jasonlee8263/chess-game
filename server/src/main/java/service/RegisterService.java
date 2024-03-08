@@ -3,6 +3,7 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import model.UserData;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import requestAndResult.RegisterRequest;
 import requestAndResult.RegisterResult;
 
@@ -17,7 +18,12 @@ public class RegisterService {
         this.authDAO = authDAO;
     }
     public RegisterResult register(RegisterRequest request) throws SQLException, DataAccessException {
-        UserData user = new UserData(request.username(), request.password(), request.email());
+        if(request.password()==null){
+            return new RegisterResult(null, null,"Error: bad request");
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(request.password());
+        UserData user = new UserData(request.username(), hashedPassword, request.email());
         if(user.username()==null || user.password()==null || user.email()==null){
             return new RegisterResult(null, null,"Error: bad request");
         }

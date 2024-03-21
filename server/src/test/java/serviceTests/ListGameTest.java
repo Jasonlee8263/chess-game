@@ -8,11 +8,10 @@ import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import requestAndResult.ListGameResult;
+import model.requestAndResult.ListGameResult;
 import service.ListGameService;
 
 import java.sql.SQLException;
-import java.util.Collection;
 
 public class ListGameTest {
     private static ListGameService listGameService;

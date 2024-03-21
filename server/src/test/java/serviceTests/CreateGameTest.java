@@ -6,8 +6,8 @@ import dataAccess.MemoryGameDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import requestAndResult.CreateGameRequest;
-import requestAndResult.CreateGameResult;
+import model.requestAndResult.CreateGameRequest;
+import model.requestAndResult.CreateGameResult;
 import service.CreateGameService;
 
 public class CreateGameTest {

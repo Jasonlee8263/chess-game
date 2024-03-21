@@ -10,7 +10,7 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import requestAndResult.JoinGameRequest;
+import model.requestAndResult.JoinGameRequest;
 import service.JoinGameService;
 
 import java.sql.SQLException;

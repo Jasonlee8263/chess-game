@@ -3,12 +3,11 @@ package serviceTests;
 import dataAccess.DataAccessException;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
-import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import requestAndResult.RegisterRequest;
-import requestAndResult.RegisterResult;
+import model.requestAndResult.RegisterRequest;
+import model.requestAndResult.RegisterResult;
 import service.RegisterService;
 
 import java.sql.SQLException;

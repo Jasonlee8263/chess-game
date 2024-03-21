@@ -4,8 +4,8 @@ import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.GameData;
-import requestAndResult.CreateGameRequest;
-import requestAndResult.CreateGameResult;
+import model.requestAndResult.CreateGameRequest;
+import model.requestAndResult.CreateGameResult;
 
 public class CreateGameService {
     private GameDAO gameDAO;

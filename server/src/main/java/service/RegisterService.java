@@ -4,8 +4,8 @@ import dataAccess.*;
 import model.AuthData;
 import model.UserData;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import requestAndResult.RegisterRequest;
-import requestAndResult.RegisterResult;
+import model.requestAndResult.RegisterRequest;
+import model.requestAndResult.RegisterResult;
 
 import java.sql.SQLException;
 import java.util.UUID;

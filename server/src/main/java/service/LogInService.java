@@ -3,8 +3,8 @@ package service;
 import dataAccess.*;
 import model.AuthData;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import requestAndResult.LogInRequest;
-import requestAndResult.LogInResult;
+import model.requestAndResult.LogInRequest;
+import model.requestAndResult.LogInResult;
 
 import java.sql.SQLException;
 import java.util.UUID;

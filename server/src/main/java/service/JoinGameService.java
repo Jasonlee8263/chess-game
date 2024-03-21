@@ -5,7 +5,7 @@ import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.GameData;
-import requestAndResult.JoinGameRequest;
+import model.requestAndResult.JoinGameRequest;
 
 import java.sql.SQLException;
 import java.util.Objects;

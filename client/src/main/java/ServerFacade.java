@@ -1,9 +1,6 @@
 import com.google.gson.Gson;
 import model.UserData;
-import model.requestAndResult.CreateGameRequest;
-import model.requestAndResult.JoinGameRequest;
-import model.requestAndResult.LogInRequest;
-import model.requestAndResult.RegisterRequest;
+import model.requestAndResult.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,34 +16,34 @@ public class ServerFacade {
     public ServerFacade(String url) {
         serverUrl = url;
     }
-    public Object register(RegisterRequest request){
+    public Object register(RegisterRequest request) throws ResponseException {
         String path = "/user";
-        return this.makeRequest("POST",path,request,RegisterRequest.class);
+        return this.makeRequest("POST",path,request, RegisterResult.class);
     }
 
-    public Object login(LogInRequest request){
+    public Object login(LogInRequest request) throws ResponseException{
         String path = "/session";
-        return this.makeRequest("POST",path,request,LogInRequest.class);
+        return this.makeRequest("POST",path,request,LogInResult.class);
     }
 
-    public void logout() {
+    public void logout() throws ResponseException {
         String path = "/session";
         this.makeRequest("DELETE",path,null,null);
     }
 
-    public Object createGame(CreateGameRequest request){
+    public Object createGame(CreateGameRequest request) throws ResponseException {
         String path = "/game";
-        return this.makeRequest("POST",path,request,CreateGameRequest.class);
+        return this.makeRequest("POST",path,request,CreateGameResult.class);
     }
 
-    public void listGame() {
+    public void listGame() throws ResponseException {
         String path = "/game";
-        this.makeRequest("GET",path,null,null);
+        this.makeRequest("GET",path,null, ListGameResult.class);
     }
 
-    public Object joinGame(JoinGameRequest request) {
+    public Object joinGame(JoinGameRequest request) throws ResponseException {
         String path = "/game";
-        return this.makeRequest("PUT",path,request,JoinGameRequest.class);
+        return this.makeRequest("PUT",path,request,null);
     }
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
         try {

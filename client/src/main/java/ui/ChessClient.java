@@ -2,10 +2,7 @@ package ui;
 
 import model.GameData;
 import model.ResponseException;
-import model.requestAndResult.CreateGameRequest;
-import model.requestAndResult.ListGameResult;
-import model.requestAndResult.LogInRequest;
-import model.requestAndResult.RegisterRequest;
+import model.requestAndResult.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +30,7 @@ public class ChessClient {
                 case "creategame" -> createGame(params);
                 case "listgame" -> listGame();
                 case "joingame" -> joinGame(params);
+                case "joinasobserver" -> joinGame(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -77,14 +75,19 @@ public class ChessClient {
     }
     public String listGame() throws ResponseException {
         ListGameResult response = serverFacade.listGame();
-        GameData[] arr = new ArrayList<GameData>;
-        for(GameData game:response.games()){
-            arr.
-        }
-        return
-    }
-    public String joinGame(String... params){
+//        GameData[] arr = new ArrayList<GameData>;
+//        for(GameData game:response.games()){
+//            arr.
+//        }
+//        return response.games();
         return null;
+    }
+    public String joinGame(String... params) throws ResponseException {
+        if(params.length==2){
+            JoinGameRequest req = new JoinGameRequest(params[0],Integer.parseInt(params[1]));
+            serverFacade.joinGame(req);
+        }
+        return "Join Success!";
     }
 
     public String help() {

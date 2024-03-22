@@ -40,7 +40,18 @@ public class ServerFacade {
 
     public ListGameResult listGame() throws ResponseException {
         String path = "/game";
-        return this.makeRequest("GET",path,null, ListGameResult.class);
+        try {
+            URL url = (new URI(serverUrl + path)).toURL();
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod("GET");
+
+            writeBody(null, http);
+            http.connect();
+            throwIfNotSuccessful(http);
+            return readBody(http, ListGameResult.class);
+        } catch (Exception ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
     }
 
     public Object joinGame(JoinGameRequest request) throws ResponseException {

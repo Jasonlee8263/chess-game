@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class ServerFacade {
     private final String serverUrl;
-    private String authToken;
+    private static String authToken;
 
     public ServerFacade(String url) {
         serverUrl = url;
@@ -73,6 +73,7 @@ public class ServerFacade {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
+            http.addRequestProperty("Authorization",authToken);
             http.setDoOutput(true);
 
             writeBody(request, http);

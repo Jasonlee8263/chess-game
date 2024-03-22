@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static ui.EscapeSequences.*;
+
 public class ChessClient {
     private final ServerFacade serverFacade;
     private final String serverUrl;
@@ -75,7 +77,6 @@ public class ChessClient {
     }
     public String listGame() throws ResponseException {
         ListGameResult response = serverFacade.listGame();
-//        GameData[] arr = new ArrayList<GameData>;
         for(GameData game:response.games()){
             System.out.println(String.format("GameID: %s, Gamename: %s, WhitePlayer: %s, BlackPlayer: %s", game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
         }
@@ -86,6 +87,8 @@ public class ChessClient {
             JoinGameRequest req = new JoinGameRequest(params[0],Integer.parseInt(params[1]));
             serverFacade.joinGame(req);
         }
+        String playerColor = params[0];
+        drawBoard(playerColor);
         return "Join Success!";
     }
 
@@ -94,6 +97,7 @@ public class ChessClient {
             JoinGameRequest req = new JoinGameRequest(null,Integer.parseInt(params[0]));
             serverFacade.joinGame(req);
         }
+        drawBoard(null);
         return "Joined as observer";
     }
 
@@ -115,5 +119,117 @@ public class ChessClient {
                 - Help - possible commands
                 - Quit
                 """;
+    }
+    private void drawBoard(String playerColor) {
+        boolean whiteAtBottom = (playerColor == null || Objects.equals(playerColor, "white"));
+
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                // Alternate colors for the chessboard squares
+                if ((row + col) % 2 == 0) {
+                    System.out.print(SET_BG_COLOR_BLACK);
+                } else {
+                    System.out.print(SET_BG_COLOR_WHITE);
+                }
+
+                // Print the chess piece or empty square
+                if (whiteAtBottom) {
+                    // White pieces at the bottom, black pieces at the top
+                    if (row == 1 || row == 2) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(BLACK_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(BLACK_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(BLACK_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(BLACK_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(BLACK_KING);
+                                break;
+                        }
+                    } else if (row == 7 || row == 8) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(WHITE_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(WHITE_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(WHITE_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(WHITE_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(WHITE_KING);
+                                break;
+                        }
+                    } else {
+                        System.out.print(EMPTY);
+                    }
+                } else {
+                    // Black pieces at the bottom, white pieces at the top
+                    if (row == 7 || row == 8) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(BLACK_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(BLACK_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(BLACK_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(BLACK_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(BLACK_KING);
+                                break;
+                        }
+                    } else if (row == 1 || row == 2) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(WHITE_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(WHITE_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(WHITE_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(WHITE_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(WHITE_KING);
+                                break;
+                        }
+                    } else {
+                        System.out.print(EMPTY);
+                    }
+                }
+            }
+            System.out.println("\u001B[49m");
+        }
     }
 }

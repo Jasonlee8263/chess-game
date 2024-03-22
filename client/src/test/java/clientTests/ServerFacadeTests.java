@@ -1,6 +1,8 @@
 package clientTests;
 
 import model.ResponseException;
+import model.requestAndResult.CreateGameRequest;
+import model.requestAndResult.JoinGameRequest;
 import model.requestAndResult.LogInRequest;
 import model.requestAndResult.RegisterRequest;
 import org.junit.jupiter.api.*;
@@ -60,40 +62,64 @@ public class ServerFacadeTests {
         serverFacade.register(request);
         LogInRequest logInRequest = new LogInRequest("test","password");
         serverFacade.login(logInRequest);
-        serverFacade.logout();
-
+        Assertions.assertDoesNotThrow(()->serverFacade.logout());
     }
     @Test
     public void logOutTestFail(){
-
+        Assertions.assertThrows(ResponseException.class,()->serverFacade.logout());
     }
     @Test
-    public void createGameTest(){
-
+    public void createGameTest() throws ResponseException{
+        RegisterRequest request = new RegisterRequest("test","password","testemail");
+        serverFacade.register(request);
+        LogInRequest logInRequest = new LogInRequest("test","password");
+        serverFacade.login(logInRequest);
+        CreateGameRequest gameRequest = new CreateGameRequest("test");
+        Assertions.assertDoesNotThrow(()->serverFacade.createGame(gameRequest));
     }
     @Test
     public void createGameTestFail(){
-
+        CreateGameRequest request = new CreateGameRequest("test");
+        Assertions.assertThrows(ResponseException.class,()->serverFacade.createGame(request));
     }
     @Test
-    public void listGameTest(){
-
+    public void listGameTest() throws ResponseException{
+        RegisterRequest request = new RegisterRequest("test","password","testemail");
+        serverFacade.register(request);
+        LogInRequest logInRequest = new LogInRequest("test","password");
+        serverFacade.login(logInRequest);
+        CreateGameRequest gameRequest = new CreateGameRequest("test");
+        serverFacade.createGame(gameRequest);
+        Assertions.assertDoesNotThrow(()->serverFacade.listGame());
     }
     @Test
     public void listGameTestFail(){
-
+        Assertions.assertThrows(ResponseException.class,()->serverFacade.listGame());
     }
     @Test
-    public void joinGameTest(){
+    public void joinGameTest() throws ResponseException{
+        RegisterRequest request = new RegisterRequest("test","password","testemail");
+        serverFacade.register(request);
+        LogInRequest logInRequest = new LogInRequest("test","password");
+        serverFacade.login(logInRequest);
+        CreateGameRequest gameRequest = new CreateGameRequest("test");
+        serverFacade.createGame(gameRequest);
+        JoinGameRequest joinGameRequest = new JoinGameRequest("white",1);
+        Assertions.assertDoesNotThrow(()->serverFacade.joinGame(joinGameRequest));
 
     }
     @Test
     public void joinGameTestFail(){
-
+        JoinGameRequest joinGameRequest = new JoinGameRequest("white",1);
+        Assertions.assertThrows(ResponseException.class,()->serverFacade.joinGame(joinGameRequest));
     }
     @Test
-    public void clearTest(){
-
+    public void clearTest() throws ResponseException{
+        RegisterRequest request = new RegisterRequest("test","password","testemail");
+        serverFacade.register(request);
+        CreateGameRequest gameRequest = new CreateGameRequest("test");
+        serverFacade.createGame(gameRequest);
+        Assertions.assertDoesNotThrow(()->serverFacade.clear());
     }
 
 }

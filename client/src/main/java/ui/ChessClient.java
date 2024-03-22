@@ -76,11 +76,10 @@ public class ChessClient {
     public String listGame() throws ResponseException {
         ListGameResult response = serverFacade.listGame();
 //        GameData[] arr = new ArrayList<GameData>;
-//        for(GameData game:response.games()){
-//            arr.
-//        }
-//        return response.games();
-        return null;
+        for(GameData game:response.games()){
+            System.out.println(String.format("GameID: %s, Gamename: %s, WhitePlayer: %s, BlackPlayer: %s", game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
+        }
+        return "";
     }
     public String joinGame(String... params) throws ResponseException {
         if(params.length==2){
@@ -116,10 +115,5 @@ public class ChessClient {
                 - Help - possible commands
                 - Quit
                 """;
-    }
-    private void assertSignedIn() throws ResponseException {
-        if (!loginState) {
-            throw new ResponseException(400, "You must sign in");
-        }
     }
 }

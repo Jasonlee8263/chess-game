@@ -25,10 +25,10 @@ public class JoinGameService {
         }
         GameData gameData = gameDAO.getGame(request.gameID());
         AuthData emptyAuth = new AuthData(null,null);
-        if((!(Objects.equals(request.playerColor(),"WHITE") || Objects.equals(request.playerColor(),"BLACK") || request.playerColor()==null)) || gameData==null || gameData.gameID()==null){
+        if((!(Objects.equals(request.playerColor(),"white") || Objects.equals(request.playerColor(),"black") || request.playerColor()==null)) || gameData==null || gameData.gameID()==null){
             return "Error: bad request";
         }
-        else if(("WHITE".equals(request.playerColor()) && gameData.whiteUsername()!=null) || ("BLACK".equals(request.playerColor()) && gameData.blackUsername()!=null)){
+        else if(("white".equals(request.playerColor()) && gameData.whiteUsername()!=null) || ("black".equals(request.playerColor()) && gameData.blackUsername()!=null)){
             return "Error: already taken";
         }
         gameDAO.updateGame(request.gameID(), username, request.playerColor());

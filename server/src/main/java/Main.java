@@ -9,6 +9,6 @@ public class Main {
 
         Server server = new Server();
 
-        server.run(0);
+        server.run(8080);
     }
 }

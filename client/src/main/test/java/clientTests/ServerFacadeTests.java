@@ -60,6 +60,7 @@ public class ServerFacadeTests {
         serverFacade.register(request);
         LogInRequest logInRequest = new LogInRequest("test","password");
         serverFacade.login(logInRequest);
+        serverFacade.logout();
 
     }
     @Test

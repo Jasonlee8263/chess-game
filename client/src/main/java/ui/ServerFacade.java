@@ -14,18 +14,23 @@ import java.net.URL;
 
 public class ServerFacade {
     private final String serverUrl;
+    private String authToken;
 
     public ServerFacade(String url) {
         serverUrl = url;
     }
     public RegisterResult register(RegisterRequest request) throws ResponseException {
         String path = "/user";
-        return this.makeRequest("POST",path,request, RegisterResult.class);
+        RegisterResult response = this.makeRequest("POST",path,request, RegisterResult.class);
+        authToken = response.authToken();
+        return response;
     }
 
     public LogInResult login(LogInRequest request) throws ResponseException {
         String path = "/session";
-        return this.makeRequest("POST",path,request,LogInResult.class);
+        LogInResult response = this.makeRequest("POST",path,request,LogInResult.class);
+        authToken = response.authToken();
+        return response;
     }
 
     public void logout() throws ResponseException {

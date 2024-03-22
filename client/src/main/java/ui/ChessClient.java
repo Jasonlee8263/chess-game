@@ -42,9 +42,9 @@ public class ChessClient {
 
     public String register(String... params) throws ResponseException {
         if(params.length==3){
-            loginState = true;
             RegisterRequest req = new RegisterRequest(params[0],params[1],params[2]);
             String username = serverFacade.register(req).username();
+            loginState = true;
             return String.format("You registered and logged in as %s.", username);
         }
         throw new ResponseException(400, "Bad Request");
@@ -52,17 +52,17 @@ public class ChessClient {
 
     public String logIn(String... params) throws ResponseException{
         if(params.length==2){
-            loginState = true;
             LogInRequest req = new LogInRequest(params[0],params[1]);
             var response = serverFacade.login(req);
             String username = response.username();
+            loginState = true;
             return String.format("You logged in as %s.", username);
         }
         throw new ResponseException(400, "Bad Request");
     }
     public String logOut() throws ResponseException {
-        loginState = false;
         serverFacade.logout();
+        loginState = false;
         return "You logged out";
     }
     public String createGame(String... params) throws ResponseException {
@@ -116,5 +116,10 @@ public class ChessClient {
                 - Help - possible commands
                 - Quit
                 """;
+    }
+    private void assertSignedIn() throws ResponseException {
+        if (!loginState) {
+            throw new ResponseException(400, "You must sign in");
+        }
     }
 }

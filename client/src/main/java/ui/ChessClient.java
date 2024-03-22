@@ -30,7 +30,7 @@ public class ChessClient {
                 case "creategame" -> createGame(params);
                 case "listgame" -> listGame();
                 case "joingame" -> joinGame(params);
-                case "joinasobserver" -> joinGame(params);
+                case "joinasobserver" -> joinAsObserver(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -88,6 +88,14 @@ public class ChessClient {
             serverFacade.joinGame(req);
         }
         return "Join Success!";
+    }
+
+    public String joinAsObserver(String... params) throws ResponseException {
+        if(params.length==1) {
+            JoinGameRequest req = new JoinGameRequest(null,Integer.parseInt(params[0]));
+            serverFacade.joinGame(req);
+        }
+        return "Joined as observer";
     }
 
     public String help() {

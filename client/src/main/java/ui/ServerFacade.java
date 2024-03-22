@@ -1,5 +1,7 @@
+package ui;
+
 import com.google.gson.Gson;
-import model.UserData;
+import model.ResponseException;
 import model.requestAndResult.*;
 
 import java.io.IOException;
@@ -16,12 +18,12 @@ public class ServerFacade {
     public ServerFacade(String url) {
         serverUrl = url;
     }
-    public Object register(RegisterRequest request) throws ResponseException {
+    public RegisterResult register(RegisterRequest request) throws ResponseException {
         String path = "/user";
         return this.makeRequest("POST",path,request, RegisterResult.class);
     }
 
-    public Object login(LogInRequest request) throws ResponseException{
+    public LogInResult login(LogInRequest request) throws ResponseException {
         String path = "/session";
         return this.makeRequest("POST",path,request,LogInResult.class);
     }
@@ -31,14 +33,14 @@ public class ServerFacade {
         this.makeRequest("DELETE",path,null,null);
     }
 
-    public Object createGame(CreateGameRequest request) throws ResponseException {
+    public CreateGameResult createGame(CreateGameRequest request) throws ResponseException {
         String path = "/game";
         return this.makeRequest("POST",path,request,CreateGameResult.class);
     }
 
-    public void listGame() throws ResponseException {
+    public ListGameResult listGame() throws ResponseException {
         String path = "/game";
-        this.makeRequest("GET",path,null, ListGameResult.class);
+        return this.makeRequest("GET",path,null, ListGameResult.class);
     }
 
     public Object joinGame(JoinGameRequest request) throws ResponseException {
@@ -46,7 +48,7 @@ public class ServerFacade {
         return this.makeRequest("PUT",path,request,null);
     }
 
-    public void clear() throws ResponseException{
+    public void clear() throws ResponseException {
         String path = "/db";
         this.makeRequest("DELETE",path,null,null);
     }

@@ -1,3 +1,5 @@
+package model;
+
 public class ResponseException extends Exception{
     final private int statusCode;
 

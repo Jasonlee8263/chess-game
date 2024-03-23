@@ -78,7 +78,7 @@ public class ChessClient {
     public String listGame() throws ResponseException {
         ListGameResult response = serverFacade.listGame();
         for(GameData game:response.games()){
-            System.out.println(String.format("GameID: %s, Gamename: %s, WhitePlayer: %s, BlackPlayer: %s", game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
+            System.out.println(String.format("GameNumber: %s, Gamename: %s, WhitePlayer: %s, BlackPlayer: %s", game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
         }
         return "";
     }
@@ -88,7 +88,9 @@ public class ChessClient {
             serverFacade.joinGame(req);
         }
         String playerColor = params[0];
+        String oppositeColor = Objects.equals(playerColor, "white") ? "black" : "white";
         drawBoard(playerColor);
+        drawBoard(oppositeColor);
         return "Join Success!";
     }
 
@@ -98,6 +100,7 @@ public class ChessClient {
             serverFacade.joinGame(req);
         }
         drawBoard(null);
+        drawBoard("black");
         return "Joined as observer";
     }
 
@@ -123,113 +126,162 @@ public class ChessClient {
     private void drawBoard(String playerColor) {
         boolean whiteAtBottom = (playerColor == null || Objects.equals(playerColor, "white"));
 
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                // Alternate colors for the chessboard squares
-                if ((row + col) % 2 == 0) {
-                    System.out.print(SET_BG_COLOR_BLACK);
-                } else {
-                    System.out.print(SET_BG_COLOR_WHITE);
-                }
-
-                // Print the chess piece or empty square
-                if (whiteAtBottom) {
-                    // White pieces at the bottom, black pieces at the top
-                    if (row == 1 || row == 2) {
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(BLACK_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(BLACK_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(BLACK_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(BLACK_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(BLACK_KING);
-                                break;
-                        }
-                    } else if (row == 7 || row == 8) {
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(WHITE_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(WHITE_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(WHITE_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(WHITE_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(WHITE_KING);
-                                break;
-                        }
-                    } else {
-                        System.out.print(EMPTY);
-                    }
-                } else {
-                    // Black pieces at the bottom, white pieces at the top
-                    if (row == 7 || row == 8) {
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(BLACK_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(BLACK_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(BLACK_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(BLACK_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(BLACK_KING);
-                                break;
-                        }
-                    } else if (row == 1 || row == 2) {
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(WHITE_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(WHITE_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(WHITE_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(WHITE_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(WHITE_KING);
-                                break;
-                        }
-                    } else {
-                        System.out.print(EMPTY);
-                    }
-                }
-            }
-            System.out.println("\u001B[49m");
+        // Print column indices
+        System.out.print("   ");
+        for (int col = 1; col <= 8; col++) {
+            System.out.print(" " + col + " ");
         }
+        System.out.println();
+
+        if (whiteAtBottom) {
+            // Print row indices from 1 to 8
+            for (int row = 1; row <= 8; row++) {
+                // Print row index on the right side
+                System.out.print(row + " ");
+
+                for (int col = 1; col <= 8; col++) {
+                    // Alternate colors for the chessboard squares
+                    if ((row + col) % 2 == 0) {
+                        System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+                    } else {
+                        System.out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                    }
+
+                    // Print the chess piece or empty square
+                    if (row == 1) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(EscapeSequences.BLACK_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(EscapeSequences.BLACK_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(EscapeSequences.BLACK_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(EscapeSequences.BLACK_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(EscapeSequences.BLACK_KING);
+                                break;
+                        }
+                    } else if (row == 2) {
+                        // Black pawns at row 2
+                        System.out.print(EscapeSequences.BLACK_PAWN);
+                    } else if (row == 7) {
+                        // White pawns at row 7
+                        System.out.print(EscapeSequences.WHITE_PAWN);
+                    } else if (row == 8) {
+                        // White pieces at the bottom row
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(EscapeSequences.WHITE_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(EscapeSequences.WHITE_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(EscapeSequences.WHITE_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(EscapeSequences.WHITE_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(EscapeSequences.WHITE_KING);
+                                break;
+                        }
+                    } else {
+                        System.out.print(EscapeSequences.EMPTY);
+                    }
+                }
+                // Print row index at the bottom
+                System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
+            }
+        } else {
+            // Print row indices from 8 to 1
+            for (int row = 8; row >= 1; row--) {
+                // Print row index on the right side
+                System.out.print(row + " ");
+
+                for (int col = 8; col >= 1; col--) {
+                    // Alternate colors for the chessboard squares
+                    if ((row + col) % 2 == 0) {
+                        System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+                    } else {
+                        System.out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                    }
+
+                    // Print the chess piece or empty square
+                    if (row == 8) {
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(EscapeSequences.WHITE_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(EscapeSequences.WHITE_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(EscapeSequences.WHITE_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(EscapeSequences.WHITE_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(EscapeSequences.WHITE_KING);
+                                break;
+                        }
+                    } else if (row == 7) {
+                        // White pawns at row 2
+                        System.out.print(EscapeSequences.WHITE_PAWN);
+                    } else if (row == 2) {
+                        // Black pawns at row 7
+                        System.out.print(EscapeSequences.BLACK_PAWN);
+                    } else if (row == 1) {
+                        // Black pieces at the bottom row
+                        switch (col) {
+                            case 1:
+                            case 8:
+                                System.out.print(EscapeSequences.BLACK_ROOK);
+                                break;
+                            case 2:
+                            case 7:
+                                System.out.print(EscapeSequences.BLACK_KNIGHT);
+                                break;
+                            case 3:
+                            case 6:
+                                System.out.print(EscapeSequences.BLACK_BISHOP);
+                                break;
+                            case 4:
+                                System.out.print(EscapeSequences.BLACK_QUEEN);
+                                break;
+                            case 5:
+                                System.out.print(EscapeSequences.BLACK_KING);
+                                break;
+                        }
+                    } else {
+                        System.out.print(EscapeSequences.EMPTY);
+                    }
+                }
+                // Print row index at the bottom
+                System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
+            }
+        }
+
+        // Print column indices at the bottom
+        System.out.print("   ");
+        for (int col = 1; col <= 8; col++) {
+            System.out.print(" " + col + " ");
+        }
+        System.out.println();
     }
 }

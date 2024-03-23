@@ -90,7 +90,9 @@ public class ChessClient {
         String playerColor = params[0];
         String oppositeColor = Objects.equals(playerColor, "white") ? "black" : "white";
         drawBoard(playerColor);
+        System.out.println();
         drawBoard(oppositeColor);
+        System.out.println();
         return "Join Success!";
     }
 
@@ -100,7 +102,9 @@ public class ChessClient {
             serverFacade.joinGame(req);
         }
         drawBoard(null);
+        System.out.println();
         drawBoard("black");
+        System.out.println();
         return "Joined as observer";
     }
 
@@ -124,16 +128,21 @@ public class ChessClient {
                 """;
     }
     private void drawBoard(String playerColor) {
-        boolean whiteAtBottom = (playerColor == null || Objects.equals(playerColor, "white"));
+        boolean whiteAtBottom = (playerColor == null || Objects.equals(playerColor,"") || Objects.equals(playerColor, "white"));
 
         // Print column indices
-        System.out.print("   ");
-        for (int col = 1; col <= 8; col++) {
-            System.out.print(" " + col + " ");
-        }
-        System.out.println();
+//        System.out.print("   ");
+//        for (int col = 1; col <= 8; col++) {
+//            System.out.print(" " + col + " ");
+//        }
+//        System.out.println();
 
         if (whiteAtBottom) {
+            System.out.print("   ");
+            for (int col = 8; col >= 1; col--) {
+                System.out.print(" " + col + " ");
+            }
+            System.out.println();
             // Print row indices from 1 to 8
             for (int row = 1; row <= 8; row++) {
                 // Print row index on the right side
@@ -204,7 +213,17 @@ public class ChessClient {
                 // Print row index at the bottom
                 System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
             }
+            System.out.print("   ");
+            for (int col = 8; col >= 1; col--) {
+                System.out.print(" " + col + " ");
+            }
+            System.out.println();
         } else {
+            System.out.print("   ");
+            for (int col = 1; col <= 8; col++) {
+                System.out.print(" " + col + " ");
+            }
+            System.out.println();
             // Print row indices from 8 to 1
             for (int row = 8; row >= 1; row--) {
                 // Print row index on the right side
@@ -275,13 +294,15 @@ public class ChessClient {
                 // Print row index at the bottom
                 System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
             }
+            System.out.print("   ");
+            for (int col = 1; col <= 8; col++) {
+                System.out.print(" " + col + " ");
+            }
+            System.out.println();
         }
 
         // Print column indices at the bottom
-        System.out.print("   ");
-        for (int col = 1; col <= 8; col++) {
-            System.out.print(" " + col + " ");
-        }
-        System.out.println();
+
+//        System.out.println();
     }
 }

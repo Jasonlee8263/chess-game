@@ -34,6 +34,11 @@ public class ChessClient {
                 case "listgame" -> listGame();
                 case "joingame" -> joinGame(params);
                 case "joinasobserver" -> joinAsObserver(params);
+                case "redraw" -> redraw();
+                case "leave" -> leave();
+                case "makemove" -> makeMove();
+                case "resign" -> resign();
+                case "highlight" -> highLight();
                 case "quit" -> "quit";
                 default -> help();
             };

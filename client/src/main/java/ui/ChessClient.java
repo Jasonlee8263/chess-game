@@ -14,6 +14,7 @@ public class ChessClient {
     private final ServerFacade serverFacade;
     private final String serverUrl;
     private boolean loginState = false;
+    private boolean joinState = false;
 
 
     public ChessClient(String serverUrl) {
@@ -93,6 +94,7 @@ public class ChessClient {
         System.out.println();
         drawBoard(oppositeColor);
         System.out.println();
+        joinState = true;
         return "Join Success!";
     }
 
@@ -105,7 +107,28 @@ public class ChessClient {
         System.out.println();
         drawBoard("black");
         System.out.println();
+        joinState = true;
         return "Joined as observer";
+    }
+
+    public String redraw(){
+        return null;
+    }
+
+    public String leave(){
+        return null;
+    }
+
+    public String makeMove() {
+        return null;
+    }
+
+    public String resign() {
+        return null;
+    }
+
+    public String highLight() {
+        return null;
     }
 
     public String help() {
@@ -115,6 +138,16 @@ public class ChessClient {
                     - LogIn <username> <password>
                     - Help - possible commands
                     - Quit
+                    """;
+        }
+        else if(!joinState){
+            return """
+                    - Redraw - Redraw Chess Board
+                    - Leave
+                    - MakeMove
+                    - Resign
+                    - Highlight - Highlight Legal Moves
+                    - Help - possible commands
                     """;
         }
         return """

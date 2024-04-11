@@ -7,6 +7,7 @@ import chess.ChessPosition;
 import model.GameData;
 import model.ResponseException;
 import model.requestAndResult.*;
+import websocket.GameHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +23,8 @@ public class ChessClient {
     ChessBoard chessBoard = new ChessBoard();
 
 
-    public ChessClient(String serverUrl) {
-        serverFacade = new ServerFacade(serverUrl);
+    public ChessClient(String serverUrl, GameHandler gameHandler) throws ResponseException {
+        serverFacade = new ServerFacade(serverUrl,gameHandler);
         this.serverUrl = serverUrl;
         chessBoard.resetBoard();
     }

@@ -40,7 +40,7 @@ public class WebsocketFacade extends Endpoint {
 
     public void joinPlayer(String playerName) throws ResponseException {
         try {
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+            this.session.getBasicRemote().sendText(new Gson().toJson());
         }
         catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -49,7 +49,7 @@ public class WebsocketFacade extends Endpoint {
 
     public void joinObserver(String playerName) throws ResponseException {
         try {
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+            this.session.getBasicRemote().sendText(new Gson().toJson());
         }
         catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -58,7 +58,7 @@ public class WebsocketFacade extends Endpoint {
 
     public void makeMove(String playerName) throws ResponseException {
         try {
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+            this.session.getBasicRemote().sendText(new Gson().toJson());
         }
         catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -66,7 +66,7 @@ public class WebsocketFacade extends Endpoint {
     }
     public void leaveGame(String playerName) throws ResponseException {
         try {
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+            this.session.getBasicRemote().sendText(new Gson().toJson());
             this.session.close();
         }
         catch (IOException ex) {
@@ -75,7 +75,7 @@ public class WebsocketFacade extends Endpoint {
     }
     public void resign(String playerName) throws ResponseException {
         try {
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+            this.session.getBasicRemote().sendText(new Gson().toJson());
         }
         catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());

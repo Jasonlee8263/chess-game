@@ -16,10 +16,14 @@ public class WebsocketHandler {
     public void onMessage(Session session, String message) throws IOException {
         ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
         switch (serverMessage.getServerMessageType()) {
-            case LOAD_GAME -> enter(action.visitorName(), session);
-            case ERROR -> exit(action.visitorName());
+            case LOAD_GAME ->
+            case ERROR ->
             case NOTIFICATION ->
         }
+    }
+
+    private void loadGame(){
+
     }
 
 

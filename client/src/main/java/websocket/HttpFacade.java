@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class HttpFacade {
     private final String serverUrl;
-    private static String authToken;
+    public String authToken;
     public HttpFacade(String url) {
         serverUrl = url;
     }

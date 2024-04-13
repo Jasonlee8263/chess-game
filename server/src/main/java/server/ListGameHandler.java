@@ -6,7 +6,7 @@ import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import model.AuthData;
 import model.requestAndResult.ListGameResult;
-import service.ListGameService;
+import service.GameService;
 import spark.Request;
 import spark.Response;
 
@@ -22,7 +22,7 @@ public class ListGameHandler {
     public Object listGame(Request req, Response res) throws DataAccessException, SQLException {
         String authToken = req.headers("Authorization");
         Gson gson = new Gson();
-        ListGameService listGameService = new ListGameService(authDAO, gameDAO);
+        GameService listGameService = new GameService(authDAO, gameDAO);
         ListGameResult result = listGameService.listGame(authToken);
         if(authDAO.getAuth(authToken).equals(new AuthData(null,null))){
             res.status(401);

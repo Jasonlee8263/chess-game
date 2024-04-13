@@ -24,7 +24,7 @@ public class JoinGameHandler {
         String authToken =  req.headers("Authorization");
         Gson gson = new Gson();
         JoinGameRequest request = gson.fromJson(req.body(),JoinGameRequest.class);
-        JoinGameService joinGameService = new JoinGameService(authDAO,gameDAO);
+        GameService joinGameService = new GameService(authDAO,gameDAO);
         String result = joinGameService.joinGame(request,authToken);
         AuthData emptyAuth = new AuthData(null,null);
         if(authDAO.getAuth(authToken).equals(emptyAuth)){

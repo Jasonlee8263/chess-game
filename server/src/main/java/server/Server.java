@@ -2,6 +2,7 @@ package server;
 
 import dataAccess.*;
 import spark.*;
+import websocket.WebsocketHandler;
 
 public class Server {
 
@@ -34,6 +35,8 @@ public class Server {
         CreateGameHandler createGameHandler = new CreateGameHandler(authDAO,gameDAO);
         ListGameHandler listGameHandler = new ListGameHandler(authDAO,gameDAO);
         JoinGameHandler joinGameHandler = new JoinGameHandler(authDAO,gameDAO);
+
+        Spark.webSocket("/connect", WebsocketHandler.class);
 
         Spark.post("/user",registerHandler::register);
         Spark.delete("/db",clearHandler::clear);

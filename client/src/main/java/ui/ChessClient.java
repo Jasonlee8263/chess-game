@@ -8,6 +8,7 @@ import model.GameData;
 import model.ResponseException;
 import model.requestAndResult.*;
 import websocket.GameHandler;
+import websocket.WebsocketFacade;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,14 +19,19 @@ import static ui.EscapeSequences.*;
 public class ChessClient {
     private final ServerFacade serverFacade;
     private final String serverUrl;
+    private WebsocketFacade ws;
     private boolean loginState = false;
     private boolean joinState = false;
-    ChessBoard chessBoard = new ChessBoard();
+    private GameHandler gameHandler;
+    private ChessBoard chessBoard;
+    private String authToken;
 
 
-    public ChessClient(String serverUrl, GameHandler gameHandler) throws ResponseException {
+    public ChessClient(String serverUrl) throws ResponseException {
         serverFacade = new ServerFacade(serverUrl,gameHandler);
         this.serverUrl = serverUrl;
+//        this.gameHandler = gameHandler;
+        chessBoard = new ChessBoard();
         chessBoard.resetBoard();
     }
     public String eval(String input) {
@@ -124,7 +130,8 @@ public class ChessClient {
     }
 
     public String redraw(){
-        return null;
+//        drawBoard();
+        return "";
     }
 
     public String leave(){
@@ -204,6 +211,9 @@ public class ChessClient {
                     else if(chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
                         getPieceType(chessPiece, BLACK_KNIGHT, BLACK_QUEEN, BLACK_PAWN, BLACK_ROOK, BLACK_BISHOP, BLACK_KING);
                     }
+                    else{
+                        System.out.print(EMPTY);
+                    }
                 }
                 // Print row index at the bottom
                 System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
@@ -227,67 +237,27 @@ public class ChessClient {
                 for (int col = 8; col >= 1; col--) {
                     // Alternate colors for the chessboard squares
                     if ((row + col) % 2 == 0) {
-                        System.out.print(EscapeSequences.SET_BG_COLOR_BLACK);
+                        System.out.print(SET_BG_COLOR_BLACK);
                     } else {
-                        System.out.print(EscapeSequences.SET_BG_COLOR_WHITE);
+                        System.out.print(SET_BG_COLOR_WHITE);
                     }
 
                     // Print the chess piece or empty square
-                    if (row == 8) {
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(EscapeSequences.WHITE_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(EscapeSequences.WHITE_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(EscapeSequences.WHITE_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(EscapeSequences.WHITE_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(EscapeSequences.WHITE_KING);
-                                break;
-                        }
-                    } else if (row == 7) {
-                        // White pawns at row 2
-                        System.out.print(EscapeSequences.WHITE_PAWN);
-                    } else if (row == 2) {
-                        // Black pawns at row 7
-                        System.out.print(EscapeSequences.BLACK_PAWN);
-                    } else if (row == 1) {
-                        // Black pieces at the bottom row
-                        switch (col) {
-                            case 1:
-                            case 8:
-                                System.out.print(EscapeSequences.BLACK_ROOK);
-                                break;
-                            case 2:
-                            case 7:
-                                System.out.print(EscapeSequences.BLACK_KNIGHT);
-                                break;
-                            case 3:
-                            case 6:
-                                System.out.print(EscapeSequences.BLACK_BISHOP);
-                                break;
-                            case 4:
-                                System.out.print(EscapeSequences.BLACK_QUEEN);
-                                break;
-                            case 5:
-                                System.out.print(EscapeSequences.BLACK_KING);
-                                break;
-                        }
-                    } else {
-                        System.out.print(EscapeSequences.EMPTY);
+                    ChessPosition chessPosition = new ChessPosition(row,col);
+                    ChessPiece chessPiece = chessBoard.getPiece(chessPosition);
+                    // Print the chess piece or empty square
+                    if (chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+                        getPieceType(chessPiece, WHITE_KNIGHT, WHITE_QUEEN, WHITE_PAWN, WHITE_ROOK, WHITE_BISHOP, WHITE_KING);
+                    }
+                    else if(chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
+                        getPieceType(chessPiece, BLACK_KNIGHT, BLACK_QUEEN, BLACK_PAWN, BLACK_ROOK, BLACK_BISHOP, BLACK_KING);
+                    }
+                    else{
+                        System.out.print(EMPTY);
                     }
                 }
                 // Print row index at the bottom
-                System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
+                System.out.println(RESET_BG_COLOR + " " + row);
             }
             System.out.print("   ");
             for (int col = 1; col <= 8; col++) {
@@ -295,20 +265,16 @@ public class ChessClient {
             }
             System.out.println();
         }
-
-        // Print column indices at the bottom
-
-//        System.out.println();
     }
 
     private void getPieceType(ChessPiece chessPiece, String knight, String queen, String pawn, String rook, String bishop, String king) {
         switch (chessPiece.getPieceType()){
-            case KNIGHT -> System.out.print(whiteKnight);
-            case QUEEN -> System.out.print(whiteQueen);
-            case PAWN -> System.out.print(whitePawn);
-            case ROOK -> System.out.print(whiteRook);
-            case BISHOP -> System.out.print(whiteBishop);
-            case KING -> System.out.print(whiteKing);
+            case KNIGHT -> System.out.print(knight);
+            case QUEEN -> System.out.print(queen);
+            case PAWN -> System.out.print(pawn);
+            case ROOK -> System.out.print(rook);
+            case BISHOP -> System.out.print(bishop);
+            case KING -> System.out.print(king);
             case null, default -> System.out.print(EMPTY);
         }
     }

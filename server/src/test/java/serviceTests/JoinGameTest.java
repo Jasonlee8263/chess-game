@@ -11,18 +11,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import model.requestAndResult.JoinGameRequest;
-import service.JoinGameService;
+import service.GameService;
 
 import java.sql.SQLException;
 
 public class JoinGameTest {
-    private static JoinGameService joinGameService;
+    private static GameService joinGameService;
     private static MemoryAuthDAO authDAO = new MemoryAuthDAO();
     private static MemoryGameDAO gameDAO = new MemoryGameDAO();
     private static MemoryUserDAO userDAO = new MemoryUserDAO();
     @BeforeAll
     public static void setJoinGameService(){
-        joinGameService = new JoinGameService(authDAO,gameDAO);
+        joinGameService = new GameService(authDAO,gameDAO);
     }
     @Test
     public void testJoinGame() throws DataAccessException, SQLException {

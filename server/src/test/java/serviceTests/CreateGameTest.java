@@ -8,15 +8,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import model.requestAndResult.CreateGameRequest;
 import model.requestAndResult.CreateGameResult;
-import service.CreateGameService;
+import service.GameService;
 
 public class CreateGameTest {
-    private static CreateGameService createGameService;
+    private static GameService createGameService;
     private static MemoryGameDAO gameDAO = new MemoryGameDAO();
     private static MemoryAuthDAO authDAO = new MemoryAuthDAO();
     @BeforeAll
     public static void setCreateGameService(){
-        createGameService = new CreateGameService(authDAO,gameDAO);
+        createGameService = new GameService(authDAO,gameDAO);
     }
     @Test
     public void testCreateGame() throws DataAccessException {

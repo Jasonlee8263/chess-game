@@ -1,5 +1,7 @@
 package ui;
 
+import model.ResponseException;
+
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -7,7 +9,7 @@ import static ui.EscapeSequences.*;
 public class Repl {
     private final ChessClient client;
 
-    public Repl(String serverURL) {
+    public Repl(String serverURL) throws ResponseException {
         client = new ChessClient(serverURL);
     }
 

@@ -7,7 +7,7 @@ import dataAccess.GameDAO;
 import model.AuthData;
 import model.requestAndResult.CreateGameRequest;
 import model.requestAndResult.CreateGameResult;
-import service.CreateGameService;
+import service.GameService;
 import spark.Request;
 import spark.Response;
 
@@ -24,7 +24,7 @@ public class CreateGameHandler {
         String authToken =  req.headers("Authorization");
         Gson gson = new Gson();
         CreateGameRequest request = gson.fromJson(req.body(),CreateGameRequest.class);
-        CreateGameService createGameService = new CreateGameService(authDAO,gameDAO);
+        GameService createGameService = new GameService(authDAO,gameDAO);
         CreateGameResult result = createGameService.createGame(request);
         if(authDAO.getAuth(authToken).equals(new AuthData(null,null))){
             res.status(401);

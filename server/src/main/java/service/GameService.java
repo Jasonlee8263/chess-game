@@ -1,5 +1,7 @@
 package service;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
@@ -9,7 +11,10 @@ import model.requestAndResult.CreateGameRequest;
 import model.requestAndResult.CreateGameResult;
 import model.requestAndResult.JoinGameRequest;
 import model.requestAndResult.ListGameResult;
+import webSocketMessages.userCommands.JoinPlayer;
+import websocket.Connection;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Objects;
@@ -55,7 +60,18 @@ public class GameService {
         Collection<GameData> gameList = gameDAO.listGame();
         return new ListGameResult(gameList,null);
     }
-    public void joinPlayer(){
-
+    public void joinPlayer(JoinPlayer joinPlayer, Connection connection, GameData gameData, String playerName) throws IOException {
+        if(joinPlayer.playerColor.equals(ChessGame.TeamColor.WHITE.toString())){
+            if(!gameData.whiteUsername().equals(playerName)){
+                var error = new Gson().toJson(new Error("Error: already taken"));
+                connection.send(error);
+            }
+        }
+        else if(joinPlayer.playerColor.equals(ChessGame.TeamColor.BLACK.toString())){
+            if(!gameData.blackUsername().equals(playerName)){
+                var error = new Gson().toJson(new Error("Error: already taken"));
+                connection.send(error);
+            }
+        }
     }
 }

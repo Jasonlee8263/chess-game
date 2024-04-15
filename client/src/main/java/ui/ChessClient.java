@@ -7,6 +7,7 @@ import chess.ChessPosition;
 import model.GameData;
 import model.ResponseException;
 import model.requestAndResult.*;
+import webSocketMessages.userCommands.Leave;
 import websocket.GameHandler;
 import websocket.WebsocketFacade;
 
@@ -25,6 +26,7 @@ public class ChessClient {
     private GameHandler gameHandler;
     private ChessBoard chessBoard;
     private String authToken;
+    private Integer gameID;
 
 
     public ChessClient(String serverUrl) throws ResponseException {
@@ -104,13 +106,12 @@ public class ChessClient {
     public String joinGame(String... params) throws ResponseException {
         if(params.length==2){
             JoinGameRequest req = new JoinGameRequest(params[0],Integer.parseInt(params[1]));
+            gameID = Integer.parseInt(params[1]);
             serverFacade.joinGame(req);
         }
         String playerColor = params[0];
         String oppositeColor = Objects.equals(playerColor, "white") ? "black" : "white";
         drawBoard(playerColor,chessBoard);
-        System.out.println();
-        drawBoard(oppositeColor,chessBoard);
         System.out.println();
         joinState = true;
         return "Join Success!";
@@ -123,19 +124,17 @@ public class ChessClient {
         }
         drawBoard(null,chessBoard);
         System.out.println();
-        drawBoard("black",chessBoard);
-        System.out.println();
         joinState = true;
         return "Joined as observer";
     }
 
     public String redraw(){
-//        drawBoard();
-        return "";
+        return drawBoard();
     }
 
-    public String leave(){
-        return null;
+    public String leave() throws ResponseException {
+        ws.leaveGame(new Leave(authToken,gameID));
+        return;
     }
 
     public String makeMove() {
@@ -159,7 +158,7 @@ public class ChessClient {
                     - Quit
                     """;
         }
-        else if(!joinState){
+        else if(joinState){
             return """
                     - Redraw - Redraw Chess Board
                     - Leave
@@ -216,7 +215,7 @@ public class ChessClient {
                     }
                 }
                 // Print row index at the bottom
-                System.out.println(EscapeSequences.RESET_BG_COLOR + " " + row);
+                System.out.println(RESET_BG_COLOR + " " + row);
             }
             System.out.print("   ");
             for (int col = 8; col >= 1; col--) {

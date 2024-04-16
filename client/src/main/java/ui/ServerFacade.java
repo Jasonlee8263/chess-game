@@ -4,6 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import model.ResponseException;
 import model.requestAndResult.*;
+import webSocketMessages.userCommands.JoinObserver;
 import webSocketMessages.userCommands.JoinPlayer;
 import websocket.GameHandler;
 import websocket.HttpFacade;
@@ -47,6 +48,12 @@ public class ServerFacade {
         authToken = httpFacade.authToken;
         JoinPlayer joinPlayer = new JoinPlayer(authToken,request.gameID(),request.playerColor());
         ws.joinPlayer(joinPlayer);
+        return httpFacade.joinGame(request);
+    }
+    public Object joinAsObserver(JoinGameRequest request) throws ResponseException {
+        authToken = httpFacade.authToken;
+        JoinObserver joinObserver = new JoinObserver(authToken,request.gameID());
+        ws.joinObserver(joinObserver);
         return httpFacade.joinGame(request);
     }
 

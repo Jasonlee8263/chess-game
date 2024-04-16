@@ -4,9 +4,7 @@ import chess.ChessGame;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
 
-import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
-import dataAccess.GameDAO;
+import dataAccess.*;
 import model.requestAndResult.JoinGameRequest;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -25,6 +23,18 @@ public class WebsocketHandler {
     private GameDAO gameDAO;
     private AuthDAO authDAO;
     private ChessGame chessGame = new ChessGame();
+    public WebsocketHandler(GameDAO gameDAO,AuthDAO authDAO) {
+        try {
+            this.gameDAO = new MySqlGameDAO();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.authDAO = new MySqlAuthDAO();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException, DataAccessException, InvalidMoveException {
         UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
@@ -67,6 +77,7 @@ public class WebsocketHandler {
         var player = new Gson().fromJson(message, MakeMove.class);
         var playerName = authDAO.getAuth(player.getAuthString()).username();
         connections.add(Integer.toString(player.gameID), player.getAuthString(), session);
+        chessGame.setBoard(ch);
         chessGame.makeMove(player.move);
         var board = new LoadGame(chessGame);
         var notifyMessage = String.format("%s did %s",playerName,player.move.toString());
@@ -76,7 +87,6 @@ public class WebsocketHandler {
     }
     private void leave(String message,Session session) throws DataAccessException, IOException {
         var player = new Gson().fromJson(message, Leave.class);
-        var game = gameDAO.getGame(player.gameID);
         var playerName = authDAO.getAuth(player.getAuthString()).username();
         var notifyMessage = String.format("%s has left the room",playerName);
         var notification = new Notification(notifyMessage);
@@ -85,7 +95,6 @@ public class WebsocketHandler {
     }
     private void resign(String message,Session session) throws IOException, DataAccessException {
         var player = new Gson().fromJson(message, Resign.class);
-        var game = gameDAO.getGame(player.gameID);
         var playerName = authDAO.getAuth(player.getAuthString()).username();
         var notifyMessage = String.format("%s has resigned",playerName);
         var notification = new Notification(notifyMessage);

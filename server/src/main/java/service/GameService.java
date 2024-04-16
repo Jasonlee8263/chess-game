@@ -11,6 +11,7 @@ import model.requestAndResult.CreateGameRequest;
 import model.requestAndResult.CreateGameResult;
 import model.requestAndResult.JoinGameRequest;
 import model.requestAndResult.ListGameResult;
+import webSocketMessages.serverMessages.ERROR;
 import webSocketMessages.userCommands.JoinPlayer;
 import websocket.Connection;
 
@@ -62,14 +63,14 @@ public class GameService {
     }
     public void joinPlayer(JoinPlayer joinPlayer, Connection connection, GameData gameData, String playerName) throws IOException {
         if(joinPlayer.playerColor.equals(ChessGame.TeamColor.WHITE.toString())){
-            if(!gameData.whiteUsername().equals(playerName)){
-                var error = new Gson().toJson(new Error("Error: already taken"));
+            if(!playerName.equals(gameData.whiteUsername())){
+                var error = new Gson().toJson(new ERROR("Error: already taken"));
                 connection.send(error);
             }
         }
         else if(joinPlayer.playerColor.equals(ChessGame.TeamColor.BLACK.toString())){
-            if(!gameData.blackUsername().equals(playerName)){
-                var error = new Gson().toJson(new Error("Error: already taken"));
+            if(!playerName.equals(gameData.blackUsername())){
+                var error = new Gson().toJson(new ERROR("Error: already taken"));
                 connection.send(error);
             }
         }

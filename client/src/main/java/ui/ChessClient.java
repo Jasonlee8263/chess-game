@@ -1,13 +1,12 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import model.GameData;
 import model.ResponseException;
 import model.requestAndResult.*;
 import webSocketMessages.userCommands.Leave;
+import webSocketMessages.userCommands.MakeMove;
+import webSocketMessages.userCommands.Resign;
 import websocket.GameHandler;
 import websocket.WebsocketFacade;
 
@@ -26,6 +25,7 @@ public class ChessClient {
     private GameHandler gameHandler;
     private ChessBoard chessBoard;
     private String authToken;
+    private String playerColor;
     private Integer gameID;
 
 
@@ -109,7 +109,7 @@ public class ChessClient {
             gameID = Integer.parseInt(params[1]);
             serverFacade.joinGame(req);
         }
-        String playerColor = params[0];
+        playerColor = params[0];
         String oppositeColor = Objects.equals(playerColor, "white") ? "black" : "white";
         drawBoard(playerColor,chessBoard);
         System.out.println();
@@ -120,7 +120,7 @@ public class ChessClient {
     public String joinAsObserver(String... params) throws ResponseException {
         if(params.length==1) {
             JoinGameRequest req = new JoinGameRequest(null,Integer.parseInt(params[0]));
-            serverFacade.joinGame(req);
+            serverFacade.joinAsObserver(req);
         }
         drawBoard(null,chessBoard);
         System.out.println();
@@ -129,20 +129,44 @@ public class ChessClient {
     }
 
     public String redraw(){
-        return drawBoard();
+        drawBoard(playerColor,chessBoard);
+        return "Redrew the board";
     }
 
     public String leave() throws ResponseException {
-        ws.leaveGame(new Leave(authToken,gameID));
-        return;
+        ws.leaveGame(new Leave(authToken,gameID)); //FIX ME!!!!
+        return "You have left the room";
     }
 
-    public String makeMove() {
-        return null;
+    public String makeMove(String... params) throws ResponseException {
+        String[] startParts = params[0].split(",");
+        int startRow = Integer.parseInt(startParts[0]);
+        int startCol = Integer.parseInt(startParts[1]);
+        String[] endParts = params[1].split(",");
+        int endRow = Integer.parseInt(endParts[0]);
+        int endCol = Integer.parseInt(endParts[1]);
+        String promotionPiece = params[2];
+        ChessPiece.PieceType pieceType = null;
+        if (promotionPiece!=null){
+            pieceType = switch (promotionPiece.toUpperCase()) {
+                case "KING" -> ChessPiece.PieceType.KING;
+                case "QUEEN" -> ChessPiece.PieceType.QUEEN;
+                case "BISHOP" -> ChessPiece.PieceType.BISHOP;
+                case "KNIGHT" -> ChessPiece.PieceType.KNIGHT;
+                case "ROOK" -> ChessPiece.PieceType.ROOK;
+                case "PAWN" -> ChessPiece.PieceType.PAWN;
+                default -> throw new IllegalStateException("Unexpected value: " + promotionPiece.toUpperCase());
+            };
+        }
+        ChessPosition startPosition = new ChessPosition(startRow,startCol);
+        ChessPosition endPosition = new ChessPosition(endRow,endCol);
+        ws.makeMove(new MakeMove(authToken,gameID,new ChessMove(startPosition,endPosition,pieceType)));
+        return "You made a move";
     }
 
-    public String resign() {
-        return null;
+    public String resign() throws ResponseException {
+        ws.resign(new Resign(authToken,gameID));
+        return "You resigned";
     }
 
     public String highLight() {
@@ -162,7 +186,7 @@ public class ChessClient {
             return """
                     - Redraw - Redraw Chess Board
                     - Leave
-                    - MakeMove
+                    - MakeMove <startposition> <endposition> <promotionpiece>
                     - Resign
                     - Highlight - Highlight Legal Moves
                     - Help - possible commands
@@ -180,16 +204,16 @@ public class ChessClient {
     }
 
     private void drawBoard(String playerColor,ChessBoard chessBoard) {
-        boolean whiteAtBottom = (playerColor == null || Objects.equals(playerColor,"") || Objects.equals(playerColor, "white"));
+        boolean blackAtBottom = (playerColor == null || Objects.equals(playerColor,"") || Objects.equals(playerColor, "black"));
 
-        if (whiteAtBottom) {
+        if (blackAtBottom) {
             System.out.print("   ");
-            for (int col = 8; col >= 1; col--) {
+            for (int col = 1; col <= 8; col++) {
                 System.out.print(" " + col + " ");
             }
             System.out.println();
             // Print row indices from 1 to 8
-            for (int row = 1; row <= 8; row++) {
+            for (int row = 8; row >= 1; row--) {
                 // Print row index on the right side
                 System.out.print(row + " ");
 
@@ -204,10 +228,10 @@ public class ChessClient {
                     ChessPosition chessPosition = new ChessPosition(row,col);
                     ChessPiece chessPiece = chessBoard.getPiece(chessPosition);
                     // Print the chess piece or empty square
-                    if (chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+                    if (chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
                         getPieceType(chessPiece, WHITE_KNIGHT, WHITE_QUEEN, WHITE_PAWN, WHITE_ROOK, WHITE_BISHOP, WHITE_KING);
                     }
-                    else if(chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
+                    else if(chessPiece!=null && chessPiece.getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
                         getPieceType(chessPiece, BLACK_KNIGHT, BLACK_QUEEN, BLACK_PAWN, BLACK_ROOK, BLACK_BISHOP, BLACK_KING);
                     }
                     else{
@@ -218,7 +242,7 @@ public class ChessClient {
                 System.out.println(RESET_BG_COLOR + " " + row);
             }
             System.out.print("   ");
-            for (int col = 8; col >= 1; col--) {
+            for (int col = 1; col <= 8; col++) {
                 System.out.print(" " + col + " ");
             }
             System.out.println();
@@ -233,7 +257,7 @@ public class ChessClient {
                 // Print row index on the right side
                 System.out.print(row + " ");
 
-                for (int col = 8; col >= 1; col--) {
+                for (int col = 1; col <= 8; col++) {
                     // Alternate colors for the chessboard squares
                     if ((row + col) % 2 == 0) {
                         System.out.print(SET_BG_COLOR_BLACK);

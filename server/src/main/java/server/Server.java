@@ -35,8 +35,9 @@ public class Server {
         CreateGameHandler createGameHandler = new CreateGameHandler(authDAO,gameDAO);
         ListGameHandler listGameHandler = new ListGameHandler(authDAO,gameDAO);
         JoinGameHandler joinGameHandler = new JoinGameHandler(authDAO,gameDAO);
+        WebsocketHandler websocketHandler = new WebsocketHandler(gameDAO,authDAO);
 
-        Spark.webSocket("/connect", WebsocketHandler.class);
+        Spark.webSocket("/connect", websocketHandler);
 
         Spark.post("/user",registerHandler::register);
         Spark.delete("/db",clearHandler::clear);

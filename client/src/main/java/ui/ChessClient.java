@@ -66,7 +66,9 @@ public class ChessClient {
     public String register(String... params) throws ResponseException {
         if(params.length==3){
             RegisterRequest req = new RegisterRequest(params[0],params[1],params[2]);
-            String username = serverFacade.register(req).username();
+            var response = serverFacade.register(req);
+            String username = response.username();
+            authToken = response.authToken();
             loginState = true;
             return String.format("You registered and logged in as %s.", username);
         }
@@ -78,6 +80,7 @@ public class ChessClient {
             LogInRequest req = new LogInRequest(params[0],params[1]);
             var response = serverFacade.login(req);
             String username = response.username();
+            authToken = response.authToken();
             loginState = true;
             return String.format("You logged in as %s.", username);
         }
@@ -110,7 +113,6 @@ public class ChessClient {
             serverFacade.joinGame(req);
         }
         playerColor = params[0];
-        String oppositeColor = Objects.equals(playerColor, "white") ? "black" : "white";
         drawBoard(playerColor,chessBoard);
         System.out.println();
         joinState = true;
@@ -120,6 +122,7 @@ public class ChessClient {
     public String joinAsObserver(String... params) throws ResponseException {
         if(params.length==1) {
             JoinGameRequest req = new JoinGameRequest(null,Integer.parseInt(params[0]));
+            gameID = Integer.parseInt(params[1]);
             serverFacade.joinAsObserver(req);
         }
         drawBoard(null,chessBoard);
@@ -134,7 +137,7 @@ public class ChessClient {
     }
 
     public String leave() throws ResponseException {
-        ws.leaveGame(new Leave(authToken,gameID)); //FIX ME!!!!
+        ws.leaveGame(new Leave(authToken,gameID));
         return "You have left the room";
     }
 

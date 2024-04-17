@@ -44,10 +44,10 @@ public class GameService {
         }
         GameData gameData = gameDAO.getGame(request.gameID());
         AuthData emptyAuth = new AuthData(null,null);
-        if((!(Objects.equals(request.playerColor(),"white") || Objects.equals(request.playerColor(),"black") || request.playerColor()==null)) || gameData==null || gameData.gameID()==null){
+        if((!(Objects.equals(request.playerColor(),"WHITE") || Objects.equals(request.playerColor(),"BLACK") || request.playerColor()==null)) || gameData==null || gameData.gameID()==null){
             return "Error: bad request";
         }
-        else if(("white".equals(request.playerColor()) && gameData.whiteUsername()!=null) || ("black".equals(request.playerColor()) && gameData.blackUsername()!=null)){
+        else if(("WHITE".equals(request.playerColor()) && gameData.whiteUsername()!=null) || ("BLACK".equals(request.playerColor()) && gameData.blackUsername()!=null)){
             return "Error: already taken";
         }
         gameDAO.updateGame(request.gameID(), username, request.playerColor());
@@ -63,13 +63,13 @@ public class GameService {
     }
     public void joinPlayer(JoinPlayer joinPlayer, Connection connection, GameData gameData, String playerName) throws IOException {
         if(joinPlayer.playerColor.equals(ChessGame.TeamColor.WHITE.toString())){
-            if(!playerName.equals(gameData.whiteUsername())){
+            if(!gameData.whiteUsername().equals(playerName)){
                 var error = new Gson().toJson(new ERROR("Error: already taken"));
                 connection.send(error);
             }
         }
         else if(joinPlayer.playerColor.equals(ChessGame.TeamColor.BLACK.toString())){
-            if(!playerName.equals(gameData.blackUsername())){
+            if(!gameData.blackUsername().equals(playerName)){
                 var error = new Gson().toJson(new ERROR("Error: already taken"));
                 connection.send(error);
             }

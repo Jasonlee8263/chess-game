@@ -44,17 +44,17 @@ public class ServerFacade {
         return httpFacade.listGame();
     }
 
-    public Object joinGame(JoinGameRequest request) throws ResponseException {
+    public void joinGame(JoinGameRequest request) throws ResponseException {
         authToken = httpFacade.authToken;
         JoinPlayer joinPlayer = new JoinPlayer(authToken,request.gameID(),request.playerColor());
+        httpFacade.joinGame(request);
         ws.joinPlayer(joinPlayer);
-        return httpFacade.joinGame(request);
     }
-    public Object joinAsObserver(JoinGameRequest request) throws ResponseException {
+    public void joinAsObserver(JoinGameRequest request) throws ResponseException {
         authToken = httpFacade.authToken;
         JoinObserver joinObserver = new JoinObserver(authToken,request.gameID());
+        httpFacade.joinGame(request);
         ws.joinObserver(joinObserver);
-        return httpFacade.joinGame(request);
     }
 
 

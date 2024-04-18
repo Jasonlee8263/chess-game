@@ -18,11 +18,6 @@ public class ConnectionManager {
         var connection = new Connection(authToken, session);
         connectionList.add(connection);
     }
-
-    public void removeFromGame(String gameID, String authToken, Session session) {
-        connections.remove(gameID);
-    }
-
     public void remove(Session session) {
         connections.values().forEach(connectionList -> connectionList.removeIf(connection -> connection.session.equals(session)));
     }

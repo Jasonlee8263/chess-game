@@ -16,6 +16,8 @@ private ChessBoard curboard;
     public ChessGame() {
         //Default
         curTurn = TeamColor.WHITE;
+        curboard = new ChessBoard();
+        curboard.resetBoard();
     }
 
     /**
@@ -154,10 +156,24 @@ private ChessBoard curboard;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        if (validMoves(curboard.findKing(teamColor)).isEmpty()) {
-            return true;
+        ChessPosition kingPosition = curboard.findKing(teamColor);
+
+        // Get all valid moves for the king
+        Collection<ChessMove> kingMoves = validMoves(kingPosition);
+
+        // Check if any of the king's moves result in not being in check
+        for (ChessMove move : kingMoves) {
+            // Simulate the move and check if the king is still in check
+            ChessBoard newBoard = curboard.copy();
+            newBoard.addPiece(move.getEndPosition(), newBoard.getPiece(move.getStartPosition()));
+            newBoard.addPiece(move.getStartPosition(), null);
+            if (!isInCheck(teamColor)) {
+                return false; // King has a move that avoids check
+            }
         }
-        return false;
+
+        // If no move avoids check, it's stalemate
+        return true;
     }
 
     /**

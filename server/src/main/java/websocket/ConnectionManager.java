@@ -1,5 +1,6 @@
 package websocket;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import webSocketMessages.serverMessages.ServerMessage;
 
@@ -31,7 +32,7 @@ public class ConnectionManager {
         if(connectionList!=null) {
             for (Connection connection : connectionList) {
                 if (connection.session.isOpen() && !connection.authToken.equals(excludeAuthToken)) {
-                    connection.send(serverMessage.toString());
+                    connection.send(new Gson().toJson(serverMessage));
                 }
             }
             connectionList.removeIf(connection -> !connection.session.isOpen());

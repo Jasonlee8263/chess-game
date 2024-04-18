@@ -172,7 +172,11 @@ public class ChessClient {
         return "You resigned";
     }
 
-    public String highLight() {
+    public String highLight(String... params) {
+        int startRow = Integer.parseInt(params[0]);
+        int startCol = Integer.parseInt(params[1]);
+        ChessPiece piece = chessBoard.getPiece(new ChessPosition(startRow,startCol));
+//        chess
         return null;
     }
 
@@ -191,7 +195,7 @@ public class ChessClient {
                     - Leave
                     - MakeMove <startposition> <endposition> <promotionpiece>
                     - Resign
-                    - Highlight - Highlight Legal Moves
+                    - Highlight <row> <column> - Highlight Legal Moves
                     - Help - possible commands
                     """;
         }

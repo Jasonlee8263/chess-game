@@ -28,7 +28,7 @@ public class GameService {
         this.gameDAO = gameDAO;
     }
     public CreateGameResult createGame(CreateGameRequest request) throws DataAccessException {
-        GameData gameData = new GameData(null,null,null, request.gameName(), null);
+        GameData gameData = new GameData(null,null,null, request.gameName(), new ChessGame());
         if(gameData.gameName()==null){
             return new CreateGameResult(null,"Error: bad request");
         }

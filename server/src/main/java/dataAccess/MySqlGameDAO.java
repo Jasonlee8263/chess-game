@@ -30,10 +30,10 @@ public class MySqlGameDAO implements GameDAO{
                 ps.setString(4, json);
                 ps.executeUpdate();
                 var rs = ps.getGeneratedKeys();
-                var ID = 0;
+                var id = 0;
                 if (rs.next()) {
-                    ID = rs.getInt(1);
-                    game = new GameData(ID,game.whiteUsername(),game.blackUsername(),game.gameName(),game.game());
+                    id = rs.getInt(1);
+                    game = new GameData(id,game.whiteUsername(),game.blackUsername(),game.gameName(),game.game());
                 }
 
 
@@ -145,15 +145,6 @@ public class MySqlGameDAO implements GameDAO{
             """
     };
     private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        }
+        MySqlAuthDAO.tryConfigureDatabase(createStatements);
     }
 }

@@ -79,6 +79,10 @@ public class MySqlAuthDAO implements AuthDAO{
             """
     };
     private void configureDatabase() throws DataAccessException {
+        tryConfigureDatabase(createStatements);
+    }
+
+    static void tryConfigureDatabase(String[] createStatements) throws DataAccessException {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {
